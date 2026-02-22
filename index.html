@@ -3,36 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Joshua Giese</title>
+  <title>Joshua Giese | Portfolio</title>
+
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+<nav class="navbar navbar-light bg-light d-lg-none">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#sidebar"
+      aria-controls="sidebar"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+</nav>
+  
 <div class="container-fluid">
   <div class="row">
 
     <!-- Sidebar -->
-    <nav class="col-lg-3 bg-light vh-100 p-4 position-fixed">
-      <h2>Joshua Giese</h2>
-      <p>
-        jwgiese23@gmail.com <br>
-        (414) 394-4414 <br>
-        Milwaukee, WI <br>
-        Linkedin.com/in/Joshua-Giese23/
-      </p>
-
+    <nav class="col-lg-3 col-12 bg-white shadow-sm p-4 collapse d-lg-block" id="sidebar">
+      <h2 class="mb-4">Joshua Giese</h2>
       <ul class="nav flex-column mt-4">
         <li class="nav-item"><a class="nav-link" href="#education">Education</a></li>
         <li class="nav-item"><a class="nav-link" href="#experience">Professional Experience</a></li>
         <li class="nav-item"><a class="nav-link" href="#extracurricular">Extracurricular</a></li>
         <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
       </ul>
+      <div class="mt-4">
+        <a href="mailto:jwgiese23@gmail.com">jwgiese23@gmail.com</a>
+      </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="col-lg-9 offset-lg-3 p-5">
+    <main class="col-lg-9 p-5">
+
+      <!-- Home -->
+        <section id="home" class="mb-5">
+          <div class="row align-items-center">
+            <div class="col-lg-6">
+              <h1 class="display-4 fw-bold">Joshua Giese</h1>
+              <p class="lead">
+                Global Communications & Japanese major focused on international marketing,
+                cross-cultural communication, and data-driven campaign strategy.
+              </p>
+              <a href="#experience" class="btn btn-dark mt-3 px-4 py-2">
+                View Experience
+              </a>
+            </div>
+            <div class="col-lg-6 text-center">
+              <img src="images/banner.jpg"
+                   class="img-fluid rounded shadow"
+                   alt="Banner Image">
+            </div>
+          </div>
+        </section>
 
       <!-- EDUCATION -->
       <section id="education" class="mb-5">
@@ -41,108 +77,99 @@
         <h4>University of Wisconsin Milwaukee</h4>
         <p>Sept 2022 - May 2026*</p>
         <ul>
-          <li>BA in Global Communications</li>
-          <li>BA in Japanese</li>
+          <li>BA in Global Communications and Japanese</li>
           <li>GPA: 3.8</li>
-          <li>Relevant Coursework
+          <li>Relevant Coursework:
             <ul>
               <li>Business Writing, Business Administration,</li>
             </ul>
           </li>
         </ul>
 
-        <h4>Nanzan University (Study Abroad, Japan)</h4>
+        <h4>Nanzan University (Study Abroad)</h4>
         <p>Sept 2023 – May 2024</p>
         <ul>
-          <li>Relevant Coursework
+          <li>Relevant Coursework:
             <ul>
-              <li><strong>Advertising campaigns in Japan</strong></li>
+              <li>Advertising campaigns in Japan, Management Sciences</li>
             </ul>
           </li>
-        </ul>
-        <p>
-          Introduction to the differences in advertising between Eastern and Western societies. Covered Japanese, Taiwanese, and American Commercials and Political Advertising campaigns.
-        </p>
-        <ul>
-          <li><strong>Management Sciences</strong></li>
-        </ul>
-        <p>
-          An introduction to operations research through case studies and examples from Japan and around the world. Examples included the scheduling of supervisors for university entrance examinations, the location of journals in the Nanzan University Library, and the scheduling of teachers at a Nanzan high school and doctors at a local private university hospital.
-        </p>
       </section>
 
       <!-- PROFESSIONAL EXPERIENCE -->
-      <section id="experience" class="mb-5">
-        <h2>PROFESSIONAL EXPERIENCE</h2>
-
-        <h4>BoxLunch (Seasonal)</h4>
-        <p>November 2025 – February 2026<br>
-        Retail Sales Associate<br>
-        Wauwatosa, Wisconsin USA</p>
-
-        <ul>
-          <li>Delivered customer service in a seasonal retail environment, assisting customers during peak holiday hours.</li>
-          <li>Managing and restocking shipments to the store and customers to keep the sales floor fully stocked.</li>
-          <li>Handled transactions, customer inquiries, loyalty acquisitions, and in-store events.</li>
-        </ul>
-
-        <p><strong>Skills Acquired:</strong></p>
-        <ul>
-          <li>POS system operation</li>
-          <li>Inventory management and organization</li>
-          <li>Visual merchandising basics</li>
-        </ul>
-
-        <h4>Trade Press Media Group (10 Week Summer Internship)</h4>
-        <p>June 2025 – August 2025<br>
-        Marketing Communications Intern.<br>
-        Wauwatosa, Wisconsin, USA</p>
-
-        <ul>
-          <li>Collaborated with the marketing, design, and editorial teams to develop campaign messaging, track engagement, and support event promotion efforts.</li>
-          <li>Producing and organizing marketing Emails/Social media posts to help promote the company’s brands and industry trade shows to over 150,000 recipients.</li>
-          <li>Created multiple Persona analyses for two of the four main industry groups. Each broke the targeted industries down into five marketable categories.</li>
-          <li>Researched and analyzed the potential impacts of American tariffs on the global supply chain, and the freight rail industry, one of the company’s customer bases.</li>
-        </ul>
-
-        <p><strong>Skills Acquired:</strong></p>
-        <ul>
-          <li>Group teamwork and project management through programs like Freedcamp</li>
-          <li>Buyer analysis across two B2B verticals.</li>
-          <li>Data collection and analysis through Omeda and Google Analytics.</li>
-          <li>Market Research and Industry analysis through a competitive analysis.</li>
-          <li>Fundamental HTML experience through the editing of email source code.</li>
-        </ul>
-
-        <h4>Lineage Logistics (Full-Time/Seasonal)</h4>
-        <p>October 2021 – October 2024<br>
-        Inventory Replenishment Operator<br>
-        Waukesha, Wisconsin, USA</p>
-
-        <ul>
-          <li>Picking and putting away palletized units of food for freezer inventory or outbound shipping. This was done using a reach truck or electric pallet jack. Inventory management included recording materials, weight, counts, and condition of food items via a Radio Frequency system.</li>
-        </ul>
-
-        <p><strong>Skills Acquired:</strong></p>
-        <ul>
-          <li>Reach truck and electric pallet jack Certification.</li>
-          <li>Organizational skills through the use of the inventory computer system.</li>
-          <li>Team and leadership skills through being the team lead of the replenishment department.</li>
-        </ul>
+      <section id="experience" class="my-5">
+        <h2 class="mb-4">Professional Experience</h2>
+        <div class="card mb-4 shadow-sm border-0">
+          <div class="card-body">
+            <h4 class="card-title">Retail Sales Associate - BoxLunch (Seasonal)</h4>
+            <p class="text-muted">November 2025 – February 2026<br>
+            Wauwatosa, Wisconsin, USA</p>
+              <ul>
+                <li>Delivered customer service in a seasonal retail environment, assisting customers during peak holiday hours.</li>
+                <li>Managing and restocking shipments to the store and customers to keep the sales floor fully stocked.</li>
+                <li>Handled transactions, customer inquiries, loyalty acquisitions, and in-store events.</li>
+              </ul>
+            <p class="fw-semibold mt-3">Skills Acquired:</p>
+              <ul>
+                <li>POS system operation</li>
+                <li>Inventory management and organization</li>
+                <li>Visual merchandising basics</li>
+              </ul>
+          </div>
+        </div>
+        <div class="card mb-4 shadow-sm border-0">
+          <div class="card-body">
+            <h4 class="card-title">Marketing Intern - Trade Press Media Group (Summer 2025)</h4>
+            <p class="text-muted">June 2025 – August 2025<br>
+            Wauwatosa, Wisconsin, USA</p>
+              <ul>
+                <li>Collaborated with the marketing, design, and editorial teams to develop campaign messaging, track engagement, and support event promotion efforts.</li>
+                <li>Producing and organizing marketing Emails/Social media posts to help promote the company’s brands and industry trade shows to over 150,000 recipients.</li>
+                <li>Created multiple Persona analyses for two of the four main industry groups. Each broke the targeted industries down into five marketable categories.</li>
+                <li>Researched and analyzed the potential impacts of American tariffs on the global supply chain, and the freight rail industry, one of the company’s customer bases.</li>
+              </ul>
+            <p class="fw-semibold mt-3">Skills Acquired:</p>
+              <ul>
+                <li>Group teamwork and project management through programs like Freedcamp</li>
+                <li>Buyer analysis across two B2B verticals.</li>
+                <li>Data collection and analysis through Omeda and Google Analytics.</li>
+                <li>Market Research and Industry Analysis through a Competitive Analysis.</li>
+                <li>Fundamental HTML experience through the editing of email source code.</li>
+              </ul>
+          </div>
+        </div>
+      
+        <!-- Job 3 -->
+        <div class="card mb-4 shadow-sm border-0">
+          <div class="card-body">
+      
+            <h4 class="card-title">Inventory Replenishment Operator - Lineage Logistics (Full-Time/Seasonal)</h4>
+            <p class="text-muted">October 2021 – October 2024<br>
+            Waukesha, Wisconsin, USA</p>
+      
+            <ul>
+              <li>Picking and putting away palletized food units for freezer inventory or outbound shipping. This was done using a reach truck or electric pallet jack. Inventory management included recording materials, weight, counts, and condition of food items via a Radio Frequency system.</li>
+            </ul>
+      
+            <p class="fw-semibold mt-3">Skills Acquired:</p>
+            <ul>
+              <li>Reach truck and electric pallet jack Certification.</li>
+              <li>Organizational skills through the use of the inventory computer system.</li>
+              <li>Team and leadership skills through being the team lead of the replenishment department.</li>
+            </ul>
+      
+          </div>
+        </div>
+      
       </section>
-
+      
       <!-- EXTRACURRICULAR -->
       <section id="extracurricular" class="mb-5">
         <h2>EXTRACURRICULAR</h2>
-
-        <p>Participation in the Fall 2024 Gerald J. Alred Professional Writing Competition</p>
-        <p>
-          This was a nomination-only competition, in which participants were tasked with writing a letter, memo, or email to someone given specified case and criteria.
-        </p>
-
-        <p>
-          First Place Prize in the 12th Annual UWM Japanese Speech and Recitation Contest
-        </p>
+          <ul>
+            <li>Participation in the Fall 2024 Gerald J. Alred Professional Writing Competition</li>
+            <li>First Place Prize in the 12th Annual UWM Japanese Speech and Recitation Contest</li>
+          </ul>
       </section>
 
       <!-- SKILLS -->
@@ -156,10 +183,45 @@
         </ul>
       </section>
 
+      <!-- Projects -->
+      <section id="portfolio" class="my-5">
+        <h2 class="mb-4">Selected Work</h2>
+      
+        <div class="row g-4">
+          
+          <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm">
+              <img src="images/project1.jpg" class="card-img-top" alt="Project 1">
+              <div class="card-body">
+                <h5 class="card-title">Persona Analysis Project</h5>
+                <p class="card-text">Marketing segmentation research for B2B industries.</p>
+              </div>
+            </div>
+          </div>
+      
+          <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm">
+              <img src="images/project2.jpg" class="card-img-top" alt="Project 2">
+              <div class="card-body">
+                <h5 class="card-title">Email Campaign Development</h5>
+                <p class="card-text">HTML-based promotional campaigns for trade shows.</p>
+              </div>
+            </div>
+          </div>
+      
+        </div>
+      </section>
+      
+      <!-- Contact -->
+      <section id="contact">
+        <h2>Contact</h2>
+        <p>Email: <a href="mailto:jwgiese23@gmail.com">jwgiese23@gmail.com</a></p>
+      </section>
     </main>
-
   </div>
 </div>
+  
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
