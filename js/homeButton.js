@@ -2,10 +2,10 @@ function goHome() {
     window.location.href = "https://jwgiese23.github.io/index.html";
 }
 
-// Create button automatically
-window.onload = function () {
+window.addEventListener("DOMContentLoaded", function () {
     const btn = document.createElement("button");
     btn.innerText = "Back to Home";
+
     btn.style.position = "fixed";
     btn.style.top = "20px";
     btn.style.left = "20px";
@@ -20,4 +20,4 @@ window.onload = function () {
     btn.onclick = goHome;
 
     document.body.appendChild(btn);
-};
+});
