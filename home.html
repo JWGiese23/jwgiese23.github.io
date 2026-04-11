@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background-color: #007BFF;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome</h1>
+
+    <button class="btn" onclick="goToResume()">Resume</button>
+    <button class="btn" onclick="goToToki()">Toki no Kao</button>
+
+    <script>
+        function goToResume() {
+            window.location.href = "https://jwgiese23.github.io/resume.html";
+        }
+
+        function goToToki() {
+            window.location.href = "https://jwgiese23.github.io/toki_no_kao.html";
+        }
+    </script>
+
+</body>
+</html>
