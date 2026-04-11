@@ -1,5 +1,5 @@
 function goHome() {
-    window.location.href = "https://jwgiese23.github.io/index.html";
+    window.location.href = "https://jwgiese23.github.io/home.html";
 }
 
 window.addEventListener("DOMContentLoaded", function () {
