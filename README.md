@@ -1,3 +1,1 @@
-# jwgiese23.github.io/home.html
-
-# Website
+# jwgiese23.github.io
