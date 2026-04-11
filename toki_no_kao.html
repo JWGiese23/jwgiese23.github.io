@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>時の顔 — The Face of Time</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+JP:wght@300;400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --aged: #e8dfc8;
+    --accent: #8b3a2a;
+    --gold: #b8952a;
+    --muted: #6b5d4f;
+    --border: #c8b99a;
+    --jp-line: #d4c5a9;
+    --shadow: rgba(26,20,16,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', 'Noto Serif JP', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.8;
+    min-height: 100vh;
+  }
+
+  /* Subtle paper texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(180,160,120,0.04) 28px),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+  }
+
+  /* Title Block */
+  .title-block {
+    text-align: center;
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .title-block::before, .title-block::after {
+    content: '◆';
+    position: absolute;
+    bottom: -10px;
+    color: var(--gold);
+    font-size: 12px;
+    background: var(--paper);
+    padding: 0 8px;
+  }
+  .title-block::before { left: 50%; transform: translateX(-50%); }
+  .title-block::after { display: none; }
+
+  .title-jp {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .title-en {
+    font-family: 'Cinzel', serif;
+    font-size: 38px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+
+  .title-author {
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* Section collapsible */
+  .section {
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    background: rgba(255,253,248,0.6);
+    box-shadow: 0 1px 4px var(--shadow);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    cursor: pointer;
+    user-select: none;
+    background: var(--aged);
+    border-bottom: 1px solid transparent;
+    transition: background 0.2s, border-color 0.2s;
+    gap: 16px;
+  }
+
+  .section-header:hover {
+    background: #dfd5be;
+  }
+
+  .section.open .section-header {
+    border-bottom-color: var(--border);
+  }
+
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    flex: 1;
+  }
+
+  .section-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .section-chevron {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--muted);
+    transition: transform 0.3s ease;
+  }
+
+  .section.open .section-chevron {
+    transform: rotate(180deg);
+  }
+
+  .section-body {
+    display: none;
+    padding: 32px 36px;
+    animation: fadeIn 0.25s ease;
+  }
+
+  .section.open .section-body {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Passage pairs */
+  .passage {
+    margin-bottom: 24px;
+  }
+
+  .passage:last-child {
+    margin-bottom: 0;
+  }
+
+  .line-en {
+    font-size: 17px;
+    line-height: 1.85;
+    color: var(--ink);
+    margin-bottom: 6px;
+    font-weight: 300;
+    padding-left: 1em;
+    text-indent: -1em;
+  }
+
+  .line-jp {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--muted);
+    margin-bottom: 0;
+    padding-bottom: 18px;
+    border-bottom: 1px dotted var(--jp-line);
+    font-weight: 300;
+  }
+
+  .passage:last-child .line-jp {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  /* Author note style */
+  .author-note-label {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .author-note-label::before, .author-note-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    align-items: center;
+  }
+
+  .ctrl-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 1px;
+    transition: all 0.2s;
+  }
+
+  .ctrl-btn:hover {
+    background: var(--aged);
+    color: var(--ink);
+    border-color: var(--muted);
+  }
+
+  .ctrl-divider {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Translator note */
+  .translator-note {
+    font-size: 12px;
+    color: #9c8a76;
+    font-style: italic;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--jp-line);
+  }
+
+  /* Scroll to top */
+  .top-link {
+    display: block;
+    text-align: center;
+    margin-top: 48px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .top-link:hover { opacity: 1; }
+
+  /* Comment markers */
+  .comment-mark {
+    display: inline;
+    background: rgba(139,58,42,0.08);
+    border-bottom: 1px dashed var(--accent);
+    cursor: help;
+    position: relative;
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="title-block">
+    <div class="title-jp">時の顔</div>
+    <div class="title-en">The Face of Time</div>
+    <div class="title-author">Komatsu Sakyō &ensp;·&ensp; 小松左京</div>
+  </div>
+
+  <div class="controls">
+    <button class="ctrl-btn" onclick="expandAll()">Expand All</button>
+    <button class="ctrl-btn" onclick="collapseAll()">Collapse All</button>
+    <div class="ctrl-divider"></div>
+  </div>
+
+  <!-- PROLOGUE -->
+  <div class="section open" id="s-prologue">
+    <div class="section-header" onclick="toggle('s-prologue')">
+      <div>
+        <div class="section-title">Prologue</div>
+        <div class="section-subtitle">Pages 30–32 &ensp;·&ensp; About the Author &amp; Author's Note</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+
+      <div class="passage">
+        <div class="line-en">Komatsu Sakyō. Born January 28, 1931 (Shōwa 6) in Osaka. Real name: Minoru. Graduated from the Italian Literature department of Kyoto University's Faculty of Letters.</div>
+        <div class="line-jp">小松左京　1931(昭和6)年1月28日、大阪市生まれ。本名・実。京都大学文学部イタリア文学卒。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">While still a student, he participated in a coterie group with Takahashi Kazuki, Miura Hiroshi, and others. After working as a magazine journalist, he spent three years writing scripts for comedy news programs on Radio Osaka.</div>
+        <div class="line-jp">在学中に高橋和己、三浦浩らと同人グループに参加。雑誌記者を経て、ラジオ大阪のニュース漫才の台本を三年にわたって執筆する。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Reading the inaugural issue of <em>SF Magazine</em>, he was struck by the possibilities of science fiction and began writing fiction again. His story "Peace on Earth," submitted to <em>SF Magazine</em>'s first contest in 1961, received an honorable mention.</div>
+        <div class="line-jp">「SFマガジン」の創刊号を読んでSFの持つ可能性に衝撃を受け、再び小説を書き始める。61年の「SFマガジン」第1回コンテストに投じた「地には平和を」は努力賞を受賞。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">The following year, with the publication of "Isen Tōriki" in the same magazine, he made his debut and immediately began publishing full-fledged SF short stories in rapid succession, ranging from humorous to serious, in a wide variety of styles.</div>
+        <div class="line-jp">翌年、「易仙逃里記」が同誌に掲載されてデビューするや、ユーモラスなものからシリアスものまで、多彩な筆致で本格的なSF短篇を矢継ぎ早に発表。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Working across every genre — space SF, time SF, SF horror, SF mystery, short-shorts, and stories of artistic mastery — he swiftly became the leading figure in Japanese science fiction.</div>
+        <div class="line-jp">宇宙SF、時間SF、SFホラー、SFミステリ、ショート・ショート、芸道小説と、あらゆるジャンルの作品を手がけ、たちまち日本SF界の第一人者となる。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">From his 1964 novel <em>The Japanese Apache Tribe</em> onward, he also demonstrated brilliance in longer works such as <em>Virus</em>, <em>The Endless Flow of Time</em>, and <em>Who Will Inherit?</em>, and his 1973 <em>Japan Sinks</em> set off a national "sinking boom."</div>
+        <div class="line-jp">64年の『日本アパッチ族』以降、『復活の日』『果しなき流れの果に』『継ぐのは誰か?』など長篇にも冴えを見せ、73年の『日本沈没』では日本中に沈没ブームを巻き起こした。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">The following year he received the 27th Mystery Writers of Japan Award for that work. In 1985 he received the 6th Japan SF Award for <em>The Capital Vanishes</em>.</div>
+        <div class="line-jp">翌年、同作品で第27回日本推理作家協会賞を受賞。85年には『首都消失』で第6回日本SF大賞を受賞した。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">In 2000 the Komatsu Sakyō Prize was established under the auspices of Kadokawa Haruki Office, with Komatsu serving on the selection committee. From 2006, publication of the <em>Complete Works of Komatsu Sakyō</em> (Josai International University Press) began.</div>
+        <div class="line-jp">2000年に角川春樹事務所の主催で小松左京賞が制定され、選考委員を務める。06年からは『小松左京全集完全版』(城西国際大学出版会)の刊行がスタートしている。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">He is also known for his wide-ranging activities far beyond the role of novelist, including producing the Osaka World Exposition.</div>
+        <div class="line-jp">大阪万博のプロデュースなど、作家としての枠をはるかに越えた幅広い活動でも知られる。</div>
+      </div>
+
+      <div class="author-note-label">Author's Note</div>
+
+      <div class="passage">
+        <div class="line-en">He went to the bathroom. He took off his terribly soiled clothes and sat in the bathtub, cradling the orb.</div>
+        <div class="line-jp">彼は浴室に行った。ひどいよごれの服をぬぎ、風呂のなかに玉をかかえてすわった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">He removed the cup and held the button down. The sound didn't bother him. If anything, it rang out pleasantly.</div>
+        <div class="line-jp">コップを外し、ボタンを押しつづけた。音も気にはならなかった。むしろ、楽しくひびいた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">He sustained the sound, gave it rhythm, and sang a song. He opened the door, opened the window, let the air flow through, and gathered water. Little by little, water collected in the bathtub.</div>
+        <div class="line-jp">彼は音を継続させ、リズムをつけ、歌をうたった。戸をあけ窓を開き、空気を流れさせ、水を集めた。水は少しずつ、風呂のなかにたまった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">He felt as though he had gotten his revenge on the civilization of Earth. The water accumulated further, rippled, and overflowed. He held the orb close.</div>
+        <div class="line-jp">彼は地球の文明に、しかえしできたような気がした。水はさらにたまり、波立ち、あふれた。彼は玉を抱きしめた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">He had been freed from the long grey expanse of time until now. Was this not what it must feel like to be a god cast out from the Earth?</div>
+        <div class="line-jp">いままでの長い灰色の時間から、解放されたのだった。地球から追い出された神とは、こんなものじゃあなかったのだろうか。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Then, all at once, he felt as though the world before his eyes had filled with radiance.</div>
+        <div class="line-jp">彼は目の前が、不意に輝きでみちたように思った。</div>
+      </div>
+
+      <div class="author-note-label">Author's Afterword</div>
+
+      <div class="passage">
+        <div class="line-en">Just as the people of the Age of Discovery felt their hearts stir at the discovery of new continents and new civilizations, in the early 1960s when I wrote this work, I was captivated by the new knowledge opening up one after another in twentieth-century fields — physical hypotheses such as time machines and parallel worlds, advances in nuclear physics, and discoveries in biology such as genetics.</div>
+        <div class="line-jp">まるで大航海時代の人々が新大陸や新しい文明の発見に胸躍らせていたのと同じように、この作品を書いた一九六○年代前半は、タイムマシンとかパラレルワールドという物理学の仮説や核物理学の発展、生物学でも遺伝子など、次々と展がっていく二十世紀的な分野の新しい知見に、私は夢中になっていた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">I remember writing with the excitement of knowing that in SF, it was permitted to use all of these things in fiction.</div>
+        <div class="line-jp">SFでは、それらを小説に使ってもよいのだという、そんな興奮をもって書いた覚えがある。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="section" id="s-w2">
+    <div class="section-header" onclick="toggle('s-w2')">
+      <div>
+        <div class="section-title">Week 2 — Quinn</div>
+        <div class="section-subtitle">Pages 33–35 (first line) &ensp;·&ensp; The Medical Council</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="passage">
+        <div class="line-en">The small conference room was lined with grave faces. Not one of them could bring themselves to look directly at the two of us.</div>
+        <div class="line-jp">小会議室の中には、沈痛な顔がずらりならんでいた。だれ一人として、僕たち二人の方を正視できないでいた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Mr. Tanaka," said Dr. Chan Tao-lung, the director, opening the discussion. "We have here the medical staff of the East Asia General Hospital. We are also joined by Dr. Duclos of the Central Institute of Pathology, President Johansen of Trondheim Medical University, and the eminent authority on specialized clinical medicine, Dr. Buchanan."</div>
+        <div class="line-jp">「タナカさん」院長のチャン・タオルン博士が口を切った。「ここには東部アジア総合病院の医局員がおります。そして中央病理学研究所のデュクロ博士、トロントハイム医大のヨハンセン総長、特殊臨床医学の泰斗ブキャナン博士の諸先生もおられます」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Dr. Chan glanced briefly around the assembled faces. "We asked you to come to our hospital to discuss your son's treatment."</div>
+        <div class="line-jp">チャン博士はちょっと顔ぶれを見わたした。「みなさん、あなたの息子さんの治療のことで、当医院においでねがったのです」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"You've gathered the leading authorities in the field," said my father — Yoshiro Tanaka, the most senior investigator at the Time Management Bureau — with a faint trace of sarcasm and anger in his voice.</div>
+        <div class="line-jp">「斯界の泰斗を網羅していただいたわけですな」おやじ――時間管理局最古参のヨシロ・タナカ調査部長の口ぶりには、かすかに皮肉と怒りがまじっていた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"So what is your conclusion? Can Kazumi be cured?"</div>
+        <div class="line-jp">「で、みなさんの結論はどうなんです? カズミはなおるんですか?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">The distinguished doctors all lowered their eyes at once.</div>
+        <div class="line-jp">えらい先生がたが、一せいに眼をふせた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">I found myself picturing Kazumi lying in the anesthesia case in the special ward. His fair-skinned, delicate face had been ravaged by the fierce attacks that struck every twenty-four hours, reduced to the appearance of a dead man.</div>
+        <div class="line-jp">僕はふと特別病棟の麻酔ケースの中に横たわる、カズミの顔をうかべた。色白、端麗な顔は、二十四時間おきにおそうはげしい苦しみにやみおとろえ、死人の症状。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Dr. Chan gave two or three metallic coughs. "We have done everything within the power of current clinical medicine. We have tried every means available."</div>
+        <div class="line-jp">チャン博士は金属的なせきばらいを二、三度した。「治療はできうるかぎりの、現在の臨床医学の知識の及ぶかぎり、あらゆる手段をつくしたものです」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">A heavy silence settled over the room.</div>
+        <div class="line-jp">沈黙が部屋を支配した。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Your son's is a rare disease," Dr. Buchanan cut in, his voice full of helpless regret. "We cannot identify the cause. I cannot accept this. I am a physician." The red-faced doctor struck the desk with his fist. "A disease like this should not exist."</div>
+        <div class="line-jp">「あなたの御子息は奇病です」悔恨やるかたないようすでブキャナン博士が口をはさんだ。「その病因がつかめない。こんな病気はあり得ない。わしは医師ですよ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">The lights dimmed and a film began to play on the screen.</div>
+        <div class="line-jp">照明が部屋を暗くして、映写が始まった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Let me explain the symptoms in detail," Dr. Chan continued. "The attacks began suddenly fourteen months ago and have since recurred at almost exactly twenty-four-hour intervals. They continue for two weeks, then cease for two weeks. According to the patient himself, it begins with a sudden stabbing pain on the surface of the skin, followed by intense pain penetrating through the muscles and into the internal organs…"</div>
+        <div class="line-jp">「病状について、説明します」チャン博士がひきついだ。「発作は一年二か月前に突然起りはじめ、それ以後、ほとんど正確に二十四時間間隔でおそってきます。これが二週間つづいては、二週間やむのです。――患者の言によりますと皮膚表面に突然おそってくる刺すような痛み、つづいて筋肉、内臓組織まで貫通するはげしい痛み……」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">I clicked my tongue despite myself. What was the point of describing the patient's suffering to the patient's own father?</div>
+        <div class="line-jp">僕は思わず舌うちした。患者の父親に、患者の苦痛を語ってきかせてどうする気だ?</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"After the pain sensation occurs, small blue spots remain on the surface of the skin. What is incomprehensible to us is this: despite the patient reporting such severe pain, the tissue itself shows no change whatsoever beyond a series of contractions."</div>
+        <div class="line-jp">「疼痛感覚が起ったあとは、青い、小さな斑点が、皮膚上に残る。――われわれにとって不可解なことは、患者がこのようにはげしい苦痛を訴えるのに、組織そのものには、一連の収縮以外何の変化も起らないということです」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">The film showed microscopic footage of muscle tissue. Blood cells moved busily through the capillaries, and semi-transparent striated muscle cells pulsed. Then, suddenly, a section of the epidermal cells contracted violently. The contraction spread in a straight line from the surface of the tissue down into its depths.</div>
+        <div class="line-jp">フィルムは筋組織の顕微鏡映画をうつし出した。毛細血管の中を血球がせわしなく動き、半透明の黄紋筋細胞がうごめいていた。と、突然表皮細胞の一部が、はげしく収縮した。その収縮は組織表皮部から深部へかけて、一直線にひろがって行った。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"That contraction of unknown cause spreading before you now — that is the attack," said Dr. Chan. "After the attack, no damage occurs to the tissue, yet the patient continues to report that the sensation of pain remains at that point. The natural conclusion is that the attacks are psychosomatic in origin. However…"</div>
+        <div class="line-jp">「今あそこにひろがって行く原因不明の収縮が、発作です」チャン博士はいった。「発作の後、組織には何の損傷も起らないのに、患者は依然として疼痛感がその点に残っていると訴えている。――当然考えられるのは、発作が心因性のものであるということです。しかし……」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">In the silence of the room, the rough sound of my father's breathing and the faint wet sound of Dr. Chan's lips were unpleasantly audible.</div>
+        <div class="line-jp">静まりかえった席上で、おやじの荒い息と、チャン博士が唇をしめす、かすかなピチャピチャという音が、いやにはっきりきこえた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Even precise psychometric examination has revealed nothing that could be called a cause. And yet — this is what makes it impossible for modern medicine to treat, and what makes it a truly rare disease — these attacks and the residual pain cannot be prevented by any anesthetic, however powerful."</div>
+        <div class="line-jp">「サイコメトリ方法による精密検査によっても何一つ原因らしいものはみとめられません。しかも――これこそ現代医学にとって不可能であり、奇病たるゆえんなのですが――この発作と残留疼痛感は、いかなる強力な麻酔をもってしても、防ぎ得ないのです」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">I felt as though I could hear Kazumi's terrible screams during an attack ringing in my ears. Inside the case… his limbs strapped down.</div>
+        <div class="line-jp">僕は発作の起った時のカズミのおそろしい叫びが耳にきこえるような気がした。ケースの中で……手足をしばりつけられて。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">A diagram of the human body appeared on the screen. Scattered across it, centered on the torso, were innumerable blue dots. My father drew in a sharp breath.</div>
+        <div class="line-jp">画面に人体の略図がうつった。その上に胴体を中心に、無数の青い点がちらばっていた。おやじが音をたてて息をすいこんだ。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="section" id="s-w3">
+    <div class="section-header" onclick="toggle('s-w3')">
+      <div>
+        <div class="section-title">Week 3 — Quinn</div>
+        <div class="section-subtitle">Pages 35–37 (third line) &ensp;·&ensp; The Diagnosis &amp; T.D.</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="passage">
+        <div class="line-en">"The attack points appear only on the front of the body, and no single point has been struck twice. At present, there are already points across much of the body…"</div>
+        <div class="line-jp">「発作点は身体前面にのみあらわれ、一か所に二度起ることはありません。現在ではすでに身体上数か所に……」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"That's enough!" my father cried. "What exactly are you trying to say? If you're telling me to give up, say so plainly. Can Kazumi not be cured?"</div>
+        <div class="line-jp">「もうけっこうです!」おやじが叫んだ。「あんたらはいったい何をいいたいんです? あきらめろというんだったら、はっきりそういってください。カズミはなおらないんですか?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">How bitterly ironic that cry of despair must ring, coming from a Time Bureau officer. There exists a Prohibition Zone — a temporal zone spanning fifty years on either side of the present that ordinary bureau officers are strictly forbidden from entering. Those permitted to leap across thousands of years are themselves forbidden from knowing anything about a future that directly concerns them.</div>
+        <div class="line-jp">この絶望的な問いが、時間局員の場合、何と皮肉にひびくことだろう。禁止時域――現在前後五十年の間、一般局員が決してはいれない時域がある。数千年をとびこえることは許されたものたちが、自分に直接関係のある未来については、知ることを禁じられているのだ。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"On that matter…" Dr. Chan said with evident difficulty, "we wished to ask for your decision here today. In conclusion — we cannot cure this illness. Left as he is, your son will continue to suffer and will die within a year or so."</div>
+        <div class="line-jp">「そのことについて……」チャン博士は苦しそうにいった。「われわれは、今日ここであなたの裁断をあおぎたかったのです。結論として――われわれには、この病気はなおせません。このままでは、御子息は苦しみつづけて一年かそこらのうちに死ぬでしょう」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Then what decision are you asking me to make?" my father said in a crushed voice. "Euthanasia?"</div>
+        <div class="line-jp">「で、何の裁断をするのです?」おやじはうちのめされた声でいった。「安楽死ですか?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"No — even if we cannot cure the disease, there is a means of prolonging his life: brain transplantation." Dr. Chan pressed on eagerly. "We would prepare an android identical to your son in every way…"</div>
+        <div class="line-jp">「いいや、病気はなおせなくとも、生命をひきのばす手段はあります――脳髄移植です」チャン博士はいきおいこんでいった。「御子息そっくりの純正アンドロイドを準備して……」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"An android!" My father suddenly gave a short, light laugh. "An android that will never age! You gentlemen don't seem to have much experience raising children yourselves. You hold the conceptual belief that personality is entirely contained in the brain. But for a father, his son's every hair, every patch of skin — no, even the illness itself — is part of his son's whole being."</div>
+        <div class="line-jp">「アンドロイドか!」突然おやじは軽い声をたてて笑った。「永遠に年をとらぬ、アンドロイド! ――あなたがたは自分で子供を育てた経験が、あまりないようですな。人格とは、脳につまっているものがすべてだと概念的に思っている。だが、父親にとっては、息子の髪の毛一本皮膚一片――いや、病気そのものが息子の全人格なのです」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Brain transplantation is not necessarily a certain solution to the problem either," said Dr. Duclos, the authority on special pathology, breaking in suddenly. "It would be best for you to know that in advance."</div>
+        <div class="line-jp">「脳髄移植も、確実に問題の解決になるとはかぎらない」突然特殊病理学の権威、デュクロ博士がいった。「そのことはあらかじめ知っておいていただいた方がいいでしょう」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">A stir ran through the doctors. Reproachful whispers were exchanged about Dr. Duclos.</div>
+        <div class="line-jp">医者たちの間に動揺が起った。デュクロ博士を非難するようなささやきがかわされた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"What do you mean?" my father asked, puzzled.</div>
+        <div class="line-jp">「どういうことです?」おやじはけげんそうにきいた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Can androids get sick too?"</div>
+        <div class="line-jp">「アンドロイドにも病気がおこるんですか？」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"In psychosomatic cases, it can happen. — In this case as well…" The doctor hesitated slightly. "Judging from the symptoms, I believe it may be T.D. … though that's a minority opinion."</div>
+        <div class="line-jp">「心因性の場合、おこることがあります。――今度の場合も……」博士はちょっとためらった。「私は症状から見て、T・Dだと思うんですが……少数意見ですが」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"What's T.D.?"</div>
+        <div class="line-jp">「T・Dって何です？」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Telepathic Disease. A psychically induced disorder. It's an illness that occurs through the action of thought-energy — an esper disease."</div>
+        <div class="line-jp">「テレパシック・ディジーズ。精神感応性疾患です。思念力の作用によって起こるエスパー病気です」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"So you're saying someone with psychic powers caused it?" I cried in shock.</div>
+        <div class="line-jp">「じゃあ、超能力の連中の誰かが起こしたというんですか？」僕はおどろいて叫んだ。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Dr. Duclos's theory is a minority view," said Dr. Johansen heavily, in his strong northern accent. "If it were T.D., the cause — in this case we should say the culprit — ought to be easy to find. We have a fully equipped psychic police force, and all espers are registered and strictly supervised…"</div>
+        <div class="line-jp">「デュクロ博士の説は少数意見です」とヨハンセン博士が、強い北方訛りで重々しくいった。「T・Dなら簡単に原因が――この際は犯人というべきでしょうが――見つかるはずですからね。完備した超能力警察、登録され厳重に取り締まられているエスパーたち……」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Of course, we requested a full investigation from the psychic police," added Dr. Buchanan. "The result was that there are absolutely no signs of such activity. Would you like to see the report?"</div>
+        <div class="line-jp">「むろん、われわれは超能力警察に依頼して、充分に調査しました」とブキャナン博士もいった。「結果は、その兆候はまったくないということです。――報告書をごらんになりますか？」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">My father was staring into space, deep in thought. Just as Dr. Chan was about to close the discussion and ask for a decision, my father suddenly stood up.</div>
+        <div class="line-jp">おやじは、宙を見つめて考えこんでいた。チャン博士がこの問題を打ち切って裁断を求めようとした時、おやじは突然立ち上った。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Gentlemen," he said, "please hold off on the transplant surgery. And please do whatever you can to keep my son alive as long as possible. That is all I ask for now."</div>
+        <div class="line-jp">「みなさん」とおやじはいった。「移植手術は待ってください。そしてせがれの命を、何とかできるだけ長くもたせてやってください。今お願いしたいのはそれだけです」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Then he turned toward the corner of the room and said in a tense voice, "Dr. Duclos — I would like to speak with you."</div>
+        <div class="line-jp">それから部屋の隅の方へ体をそむけると、つきつめた表情でいった。「デュクロ博士――お話があるのですが」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">When we entered Dr. Duclos's private office, my father habitually glanced back at the wall-screen television as though afraid to see something terrible.</div>
+        <div class="line-jp">デュクロ博士の個室へ入ると、おやじは習慣で、恐ろしいものでも見るように、こっそりと壁面テレビの方をふりかえった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"You'd better not look at your son," said Dr. Duclos.</div>
+        <div class="line-jp">「息子さんをごらんにならない方がいいですよ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">He checked the time with the subdermal medical chronometer embedded in his shoulder. "It's fifteen hundred hours. The next attack won't occur for at least another eleven hours."</div>
+        <div class="line-jp">デュクロ博士は、肩に埋めこまれた医師用の皮下時計でちょっと時刻を感じ取った。ハイポダミック・クロノメーター。「いま十五時です。発作は少なくともあと十一時間は起きません」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Dr. Duclos was still young, stocky in build like a throwback to his Teutonic ancestors, but quick and energetic.</div>
+        <div class="line-jp">デュクロ博士はまだ若く、チュートン族の先祖がえりといったずんぐりした体格だったが、いかにも機敏らしかった。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="section" id="s-w4">
+    <div class="section-header" onclick="toggle('s-w4')">
+      <div>
+        <div class="section-title">Week 4 — Oliver</div>
+        <div class="section-subtitle">Pages 37–39 (line 19) &ensp;·&ensp; Curses &amp; the Valley of Kings</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="passage">
+        <div class="line-en">"It seems they've decided to put him into cryogenic suspended animation," he said, offering us drinks. "But whether that will eliminate the pain… As long as suspended death remains only suspended and not actual death, it may not help."</div>
+        <div class="line-jp">「連中は冷凍仮死状態をとることにしたらしいですよ」と博士は飲み物をすすめながらいった。「だが、はたしてそれで苦痛がなくなるかどうか――仮死が仮死であって死でないかぎりは、だめかもしれません」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"I can't believe it," I said. "With the sensory organs, cerebrum, reflex systems, and metabolic systems all locked into complete suspended animation — is pain still possible?"</div>
+        <div class="line-jp">「信じられませんね」と僕はいった。「感覚器も大脳も反射系も代謝系も、カチカチの仮死状態にあって、なお苦痛があり得るんですか？」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"If it's T.D., it might be."</div>
+        <div class="line-jp">「T・Dならば、あるかもしれません」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"I'd like to hear more about this T.D.," my father said stiffly.</div>
+        <div class="line-jp">「そのT・Dについて、くわしくききたいのですが……」おやじはかたい声でいった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"To be honest, this field isn't very well understood," the doctor said reluctantly. "There are very few cases. Even in the fortieth century, research into psychic powers is still rather vague. Particularly the theory of sympathetic resonance — I believe it has considerable flaws. That's precisely why everyone prefers to avoid this question."</div>
+        <div class="line-jp">「じつをいうと、この分野はあまりくわしくわかっていません」と博士はいいづらそうにいった。「症例が非常に少ないので――四十世紀の超能力研究もまだあいまいなものですな。特に交感理論など、だいぶ欠陥があると思います。だからこそ、みんなこの疑問をさけたがるんですな」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Does T.D. operate across time?" my father asked.</div>
+        <div class="line-jp">「T・Dってものは時代をこえて効力を発揮しますか？」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">The doctor looked slightly surprised.</div>
+        <div class="line-jp">博士はちょっとびっくりしたようだった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Surely not — I've never heard of such a thing. Basically, it's an illness caused by what we call telekinesis or psychokinesis. It usually occurs simultaneously with concentrated thought. Of course, if the thought-energy needs time to accumulate, there may be some delay in effect."</div>
+        <div class="line-jp">「まさか――そんな話はききませんね。要するに、テレキネシスとかサイコキネシスとよばれる力で病気を起こすんですから、たいてい思念集中と同時に起こります。もっとも思念力蓄積の必要がある場合は、効果のおくれはありますが」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"What about a curse?"</div>
+        <div class="line-jp">「たたりという場合は？」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">I didn't immediately understand the meaning of that rare, obsolete word. But Dr. Duclos, well-versed in ancient medicine, seemed to understand at once.</div>
+        <div class="line-jp">この珍しい廃語になった言葉の意味が、僕にはすぐわからなかった。しかしデュクロ博士は古代医学にくわしかったから、すぐわかったらしかった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"That would be a matter of residual thought-energy," he said with a serious expression. "If residual psychic energy remains in a particular location or object, it may produce effects when someone approaches or touches it. But even then, it shouldn't persist for very long."</div>
+        <div class="line-jp">「あれは残留思念力の問題ですね」と博士はむずかしい顔をした。「特定の地域や物体に残留思念力があって、近よったり触れたりすると効果を発揮する――これもそう長くは残らないはずです」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"But in the case of Egypt's 'Valley of the Kings,' the effect lasted across forty centuries."</div>
+        <div class="line-jp">「だがエジプトの"王者の谷"の場合は、実に四十世紀をこえて効力が残った」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"We interpret that like this: the mass and structure of those pyramids, and the fact that they remained undisturbed in the desert for so long, were extremely effective in trapping and preserving psychic energy. Whether the ancient Egyptians deliberately chose that structure for that purpose, or whether it happened by chance, I cannot say."</div>
+        <div class="line-jp">「あれはこう考えます。あのピラミッドの質量と構造、それに長く砂漠のなかに放置されていたということが、サイキック・エナジーを閉じこめ保存するのに非常に役立ったのだ、と。――古代エジプト人がわざわざその目的でああいう構造をえらんだのか、偶然そうなったのかは知りませんがね」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Wait a moment," I said. "Are you suggesting that Kazumi's illness was caused by psychic energy from the past?"</div>
+        <div class="line-jp">「ちょっと待ってください」と僕はいった。「カズミの病気が、過去の思念力によって起こったとでもいうんですか？」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Perhaps…"</div>
+        <div class="line-jp">「あるいは……」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">My father began to say something, then suddenly clamped his mouth shut.</div>
+        <div class="line-jp">そういいかけて、おやじはぐっと口をつぐんだ。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Why?" I stood up abruptly, seized by a sudden surge of anxiety, and peered into his face. "Why Kazumi? If you, a Time Bureau officer, had brought back some illness from a past era, that would at least make sense. But Kazumi is just a research student at the Academy. He shouldn't have any contact with the past, should he?"</div>
+        <div class="line-jp">「どうして？」僕は突然わきあがってきた不安に、思わず立ち上がって、おやじの顔をのぞきこんだ。「なぜカズミが――時間局員のあなたが、過ぎ去った時代から病気をかかえて来たというならまだ話がわかります。だけどカズミは数学院の研究生で、過去との交渉はないはずじゃありませんか？」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Do you have some reason to suspect otherwise?" Dr. Duclos asked sharply.</div>
+        <div class="line-jp">「何か心あたりでもあるのですか？」デュクロ博士は鋭くいった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">My father fell silent, clutching his head. I could see plainly the fierce struggle raging inside him over whether to speak.</div>
+        <div class="line-jp">おやじはおしだまって頭をかかえこんでいた。言おうか言うまいかという激しい葛藤が、その胸の中にうずまいているのが、手にとるようにわかった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"The truth is…" he said in a dry voice. "In the year 1843 — Far East N-6306 District. In the terms of that era, the fourteenth year of Tenpō, intercalary ninth month. Twenty-four years ago… Japan. Edo."</div>
+        <div class="line-jp">「実は……」おやじはひからびた声でいった。「西暦一八四三年、極東N六三〇六地区――その時代の表現によるならば、天保十四年閏九月。二十四年前……ニッポン、エド。」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Stunned by the unexpected turn of events, I left Time Base 808 and ran south from Hongo, through the cut at Kiridoshi, past Hirokōji, toward the twilight Ōnarimichi.</div>
+        <div class="line-jp">僕はことのなりゆきの意外さにおどろきながら、時間基地八〇八号を出て、本郷の切り通しをぬけ、広小路からたそがれの御成道を南に向かって走っていた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">My head was overflowing with nineteenth-century Edo language, customs, and knowledge that had been hurriedly crammed into me by the hypnotic memory device. I was dressed as a traveler: a striped kimono, townsman's hairstyle, a split-shoulder cloth bundle, hand guards and leggings.</div>
+        <div class="line-jp">頭の中は催眠記憶装置（ハイプノムネモニックス）で大急ぎでつめこまれた十九世紀江戸の言語風俗や知識であふれていた。盲縞の着物に町人髪、ふりわけ包みに手甲脚絆といった旅人姿で。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Kazumi is not my real son," my father had said in Dr. Duclos's office. "My real child — twenty-seven years ago, during the wreck of the Artemis — died with my wife… He was only six months old."</div>
+        <div class="line-jp">「カズミはわしの本当の子ではないのだ」とおやじはデュクロ博士の部屋でいった。「わしの本当の子は、二十七年前のアルテミス号の遭難の時、妻といっしょに……生後六か月だった」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Then Kazumi?"</div>
+        <div class="line-jp">「じゃ、カズミは？」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Twenty-four years ago…" my father said, wringing his hands. "When I went on an investigation to the Far East 6306 district — two thousand years in the past—"</div>
+        <div class="line-jp">「二十四年前……」おやじは手をもみしだきながらいった。「わしが二千年前の極東六三〇六に調査に行った時に――」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">I cried out in alarm. "But that's a serious matter. It's a violation."</div>
+        <div class="line-jp">僕はぎょっとして叫んだ。「でも、それは大変なことです。違反です」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"It was a difficult situation," my father muttered. "If I had left the baby there, he would have died. And at that moment I sensed someone nearby, so instinctively I took the infant with me. I obtained permission to bring him back as a corpse, and had him undergo resuscitation surgery."</div>
+        <div class="line-jp">「むずかしいところだった」とおやじはつぶやいた。「赤ん坊はほっておけばそのまま死ぬところだった。それにそのとき人の気配がしたので、咄嗟に赤ん坊を連れて来てしまったのだ。そして赤ん坊は死体として持ち込み許可をとり、蘇生手術を受けさせた」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Take, try to understand. Do you know what it feels like for a father who has lost his child? …Especially in Japan—"</div>
+        <div class="line-jp">「なあ、タケ、わかってくれ。子供を失った父親の感情がどんなものか……とりわけ、ニッポンで――」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Then my father looked at me and cried out in despair.</div>
+        <div class="line-jp">それからおやじは僕の顔を見て、絶望的に叫んだ。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 5 -->
+  <div class="section" id="s-w5">
+    <div class="section-header" onclick="toggle('s-w5')">
+      <div>
+        <div class="section-title">Week 5 — Taya</div>
+        <div class="section-subtitle">Pages 39–40 (four lines from end) &ensp;·&ensp; The Decision to Investigate</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="passage">
+        <div class="line-en">"Hey, Take, try to understand! Do you know what it feels like for a father who has lost his child? …Especially how deeply people of Japanese descent have cherished their children!"</div>
+        <div class="line-jp">「なあ、タケ、わかってくれ！子供を失った父親の感情がどんなものか……とりわけ、日本系人種が子供に対してどんなに深い愛情をいだいてきたか！」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">According to that, it was completely uncertain whether the cause of Kazumi's strange illness truly lay in the nineteenth century. Still, as long as there was even a suspicion that the unexplained disease might be T.D., it seemed worthwhile to investigate the upbringing hidden behind the veil of that past.</div>
+        <div class="line-jp">それによれば、カズミの奇怪な病気の原因が実際に十九世紀にあるかどうかは、まったくあやふやだった。ただ、その原因不明の病気がT・Dかもしれないという疑いがあるかぎり、その過去のベールに閉ざされた生い立ちは探ってみる値打ちがありそうだった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"I agree," Dr. Duclos said emphatically.</div>
+        <div class="line-jp">「同感です」デュクロ博士も力をこめていった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"I have absolutely no confidence that the cause of the illness really lies there. However, that area is now the only possibility left to us. If by some chance — even the slightest chance — we can identify the cause…"</div>
+        <div class="line-jp">「病因がはたしてそこにあるかどうかは、私にも全然自信はありません。しかし、その領域は今や私たちに残されたたった一つの可能性です。ひょっとして、万一にも病因がつかめたら……」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Then would it be curable?"</div>
+        <div class="line-jp">「そうしたら治せますか？」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"No, I can't say," the doctor replied with an uncertain expression. "But if we can determine the cause, we might discover some form of treatment."</div>
+        <div class="line-jp">「いや、それは何ともいえません」博士は自信なげな表情でいった。「ただ、病因がつかめたら、何か治療手段が見つかるかもしれない」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">There still remained a practical problem. With such vague grounds, could they obtain official authorization for time travel?</div>
+        <div class="line-jp">なお、実際的な問題がのこっていた。こんなあいまいな理由で、正式の航時許可がとれるか？</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">My father stubbornly insisted on going himself, but he had already passed the age limit. And for the head of the investigation department to make the trip personally would make the matter far too serious.</div>
+        <div class="line-jp">おやじは自分で行くといってきかなかったが、すでに年齢限界をすぎていたし、調査部長自身の出張はことが大きくなりすぎる。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"I'll go," I said.</div>
+        <div class="line-jp">「僕が行きます」と僕はいった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Even then, I had something like a premonition of fate. My average psychic coefficient was six — not bad.</div>
+        <div class="line-jp">その時すでに、運命に対する予感のようなものがあった。僕の平均超能力係数は6だ、悪い方ではない。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">After all, Kazumi and I were childhood friends. When we were very small, we liked each other the moment we met. Because of that, we became friends who would never be separated. We went to the same schools.</div>
+        <div class="line-jp">なにしろカズミと僕は幼なじみだった。ごく小さい時、僕たち二人は一目見ただけでお互いに好きになった。そのために僕たちは、かなっても離れることのない友人になった。学校も一緒だった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Though our fields were different, we were close like brothers. I was the older brother and Kazumi the younger. From the very first time we met, Kazumi admired me, and I protected him. There was a bond between us deeper and stronger than friendship — though not in any strange sense. It was closer to familial love.</div>
+        <div class="line-jp">専門は違っていたが、僕たちはまるで兄弟のように親しみあっていた。僕が兄貴でカズミは弟だ――カズミは最初会った時から僕を慕い、僕は彼をかばってきた。僕たちの間には友情以上のもっと深い強いきずながあった――といって、妙な関係ではない。むしろ肉親の愛情に近いものだ。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">It was also on Kazumi's recommendation that I entered the Time Bureau with my father. I loved the younger Kazumi from the bottom of my heart. The powerful urge that I must save him no matter what — even at the cost of throwing myself away — may have been stronger in me than even in my father.</div>
+        <div class="line-jp">おやじと時間局へ入ったのもカズミの推薦だった。僕は年下のカズミを心から愛していた。どんなことがあっても、身を投げ出してでもカズミを救わねばならないという強い衝動は、おやじよりももっと強かったかもしれない。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Please issue the investigation order. If it's to save my childhood friend from danger, I'll do anything."</div>
+        <div class="line-jp">「あなたが調査命令を出してください。幼なじみの危険を救うなら、どんなことでもやりますよ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">And so I set out on what was essentially a shot-in-the-dark investigation. Whether this would truly become the decisive key to uncovering the cause of the illness was completely uncertain, but in any case I hurried from Nineteenth-Century Japan Base No. 808, located behind Tōshōgū by Shinobazu Pond in Ueno, toward Shitaya—</div>
+        <div class="line-jp">こうして僕はあてずっぽうの調査に乗り出したのだった。はたしてこれが病因解明の決め手になるかどうか、まるきり五里霧中だったが、とにかく僕は、上野不忍池のほとり、東照宮の裏にある十九世紀日本基地八〇八号から下谷へ向けて急いでいた――</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Just then, the time bell of Kan'eiji at Mount Tōei finished striking the three preliminary chimes and began sounding the "six at dusk" bell, its tones reverberating through the twilight-darkening town of Edo.</div>
+        <div class="line-jp">折しも東叡山寛永寺の時鐘が三つの捨て鐘をつき終わり、暮六つの鐘の音を、暮れなずむ江戸の町にいんいんと響かせはじめた。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 6 -->
+  <div class="section" id="s-w6">
+    <div class="section-header" onclick="toggle('s-w6')">
+      <div>
+        <div class="section-title">Week 6 — Me</div>
+        <div class="section-subtitle">Pages 41–42 (11 lines from end) &ensp;·&ensp; The Murder in Neribei Kōji</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="passage">
+        <div class="line-en">At twilight, the streets around Shitaya Kuromonchō had fallen completely silent. Turning left and then right through the dusty Edo streets where stray dogs' shadows lurked, he spotted his destination ahead — a firebreak clearing. If memory served, that was Akihabara. Using that as a landmark, I turned left again into the quiet, secluded Neribori Alley.</div>
+        <div class="line-jp">下谷黒門町のあたりは、すっかり夕闇がしずまりかえっていた。のらいぬのうろつく、ほこりっぽい江戸の町をへ、へ行くと、行く手に目標の火除けの空き地が見えた――記憶にまちがいなければ、あれが秋葉原だ。それをめやすにまた左へまがると、森閑とした練塀小路だった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Reaching the crossroads, the sound of hurried, quick footsteps in wooden clogs approached from the direction of Hanamachi, coming from near the rainwater barrel. I hid beside the barrel and put on my Edo-period hidden camera, which worked like an eyepiece.</div>
+        <div class="line-jp">四ツ角までくると、花田町の方角から小きざみにいそぐ下駄の足音が天水桶のあたりから聞こえてきた。僕は傍の天水桶にかくれて、眼帯式になったのかくしカメラをかけた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">At the crossroads, a young woman wearing a black collar, clutching a bundle to her chest, stumbled forward as if about to fall. In the blink of an eye, a dark shadow crouched at the corner lunged at her, a dagger glinting dully. The woman let out a faint scream, and as they wrestled, the man's hand towel came loose.</div>
+        <div class="line-jp">四辻に黒襟をかけた若い女が、何か包みを胸にかかえて、つんのめりそうになってかけてくる。と見るまに、角のところにうずくまっていた頬かむりの黒い影が女にとびかかるや、匕首がにぶくきらめいた。女がかすかに悲鳴をあげ、もつれあううちに男の手拭いがとける。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">The woman collapsed. The man snatched her bundle, hesitated as he peered inside, then suddenly slammed it against a nearby wall. For an instant, a baby's cry rang out. The man crouched, searching the woman's bosom. Just then, another set of footsteps approached from the direction the woman had come. The man looked up in shock and vanished into the darkness like a flash.</div>
+        <div class="line-jp">女がくずれおち、男は女の包みをとって、ためらったように中をのぞいたが、いきなり傍の塀にたたきつけた。一瞬、赤ん坊の泣き声がした。男はしゃがんで女のふところをさぐる。その時、女の来た方角からもう一つの足音が聞こえてきた。男はぎょっと顔をあげ、飛ぶように暗やみへ消えた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">The one who suddenly rushed over was a plump, middle-aged man dressed like a traveler. It was my father, twenty-four years ago.</div>
+        <div class="line-jp">ふとかけよったのは、でっぷり肥った中年の旅人姿の男だった。――二十四年前のおやじだった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">I was witnessing the moment my father, who had come to this era for an investigation, happened upon Kazumi. My father saw the woman's body, looked in the direction the man had fled, and picked up the bundle lying on the ground. He seemed startled, then looked around and spotted me hiding behind the rainwater barrel. After a moment's hesitation, my father bolted toward Okachimachi like a hare.</div>
+        <div class="line-jp">僕は、おやじがこの時代に調査に来て、偶然カズミをひろう場面に立ちあっているのだ。おやじは女の死体を見、男の逃げた方角を見、ころがっている包みをひろった。はっと驚く思いがあり、それからあたりを見まわして、天水桶のかげにいる僕を見つけた。一瞬ためらったのち、おやじは御徒町の方角へ脱兎のごとくかけ出した。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Twenty-four years ago, the figure that startled my father when he found Kazumi was none other than me. — Now, it begins.</div>
+        <div class="line-jp">二十四年前、カズミをひろった時に、おやじをおどろかせた人影とは、ほかならぬ僕のことだった。――さあ、ここからだ。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">When Kazumi was found, he had no umbilical cord or anything attached. To trace his birth, there was no choice but to follow the female line.</div>
+        <div class="line-jp">ひろわれた時のカズミは、へその緒も何もつけていなかった。彼の出生をさぐるのは、女の線をたぐるよりしかたがない。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">The face of a woman, twenty-two or twenty-three, bearing an uncanny resemblance to the adult Kazumi, was contorted in death throes. Her eyebrows were intact, she wore no iron hairpin, yet she didn't seem to be a virgin either.</div>
+        <div class="line-jp">成年したカズミのかおだちとそっくりな、二十二、三の女の顔は断末魔の苦悶にゆがんでいた。眉も落とさず、鉄のかんざしもつけず、といって生娘でもないらしい。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"The child…" the woman gasped.</div>
+        <div class="line-jp">「子どもを……」と女はあえぎながらいった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Pull yourself together!" I shouted, pressing my mouth to her ear.</div>
+        <div class="line-jp">「しっかりなさい！」僕は耳に口をあててどなった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">— In most cases, the only time a dispatched investigator can establish a decisive connection with a person from the past is at the moment of their death. It's a precaution to avoid altering events, but sometimes I feel like a grim reaper myself, thinking this is a cruel business.</div>
+        <div class="line-jp">――派遣調査員が過去の人物と決定的な関係をもてるのは、大ていの場合その人物の死のまぎわばかりだ。事態を変えないための配慮だが、時おり自分が死神のように思え、因果な商売だと思うことがある。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Name?"</div>
+        <div class="line-jp">「名は？」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"The baby's name?" I shook the woman.</div>
+        <div class="line-jp">「赤ん坊の名は？」僕が女をゆさぶった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Asato…" she said. — That was her last word.</div>
+        <div class="line-jp">「あさと……」と女はいった。――それが最後だった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">The man from earlier had already searched the pockets; nothing was left. I picked up the only clue — the filthy hand towel the killer had dropped — and started running.</div>
+        <div class="line-jp">ふところは、さっきの男がさぐっていったか何もない。僕は唯一の手がかりである、犯人が落としていった汚い手拭いをひろって走り出した。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">— The moment I rounded the corner, I collided head-on with a traveling monk chanting sutras.</div>
+        <div class="line-jp">――角を曲がったとたんに、経文をくちずさみながらやってくる旅の僧侶にどんとぶつかった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"What happened?" The monk, who seemed young, asked, startled by the impact.</div>
+        <div class="line-jp">「何かありましたか？」まだ若いらしい僧侶は、つきあたられてびっくりしたようにきいた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"I got hit."</div>
+        <div class="line-jp">「やられたんで」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Killed, I tell ya. Just now, a young woman over there—"</div>
+        <div class="line-jp">「殺しでさあ。今そこで若い女が」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"How tragic…" the monk said.</div>
+        <div class="line-jp">「それは気の毒な……」と僧侶はいった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Truly, such a pity for someone so young," I replied, trying my best to sound like a true Edo native. "My apologies, but I've got to dash off to the police station."</div>
+        <div class="line-jp">「ほんに若えのに気の毒なことで」と僕はできるだけ江戸っ子らしい口調でいった。「ごめんなせえやし、あっしはちょっとひとっぱしり番所まで」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">I slipped away and started running again. Behind me, I heard the startled voice of the monk, who must have found the body.</div>
+        <div class="line-jp">僕はその場をはずして、またかけ出した。背後で、死体を見つけたらしい僧侶の驚きの声が聞こえた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Hearing that voice, I suddenly realized something. — In the twilight gloom, glimpsed only briefly beneath the woven straw hat, I could barely make out her features. Yet I felt I had seen that face somewhere before, and her voice seemed familiar too.</div>
+        <div class="line-jp">その声を聞いた時、僕はふと気がついた。――たそがれ時の暗がりで、網代笠の下からちらりと見ただけなので、顔だちはほとんどわからなかったが、その顔をどこかで見たような気がし、その声にもおぼえがあるような気がしたのだ。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">But, driven by urgency, I kept running toward the constable's house.</div>
+        <div class="line-jp">だが、気がせくままに、僕は駐在員の家へむかって走りつづけた。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 7 -->
+  <div class="section" id="s-w7">
+    <div class="section-header" onclick="toggle('s-w7')">
+      <div>
+        <div class="section-title">Week 7 — Wesley</div>
+        <div class="section-subtitle">Pages 42–44 (seventh line) &ensp;·&ensp; Wasuke &amp; Nao the Samurai</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="passage">
+        <div class="line-en">The Time Bureau's resident agent for this era was Wasuke of the Aburaya, a police informant in Yushima Kinsukechi.</div>
+        <div class="line-jp">この時代の時間局駐在員は、湯島金助町の目明し油屋和助だった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"You're late," Wasuke said, sitting alone in front of the long brazier.</div>
+        <div class="line-jp">「おそかったな」和助は一人で長火鉢の前にすわっていた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"I knew you were coming today, so I poured a drink and waited. — Care for some nineteenth-century Edo sake?"</div>
+        <div class="line-jp">「今日来るというので、一本つけて待ってたんだ。――十九世紀の江戸の酒をのむかね?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Wasuke had been stationed in Edo for twenty years, and his appearance fit the part perfectly. With his Honda-mage topknot, his yellow-patterned haori coat thrown over his shoulders, and the languid way he held his long pipe, he looked every bit the Edo-born boss. And yet he never solved cases himself.</div>
+        <div class="line-jp">江戸に二十年も駐在している和助の恰好は、さながら板についていた。本田髷に黄八丈の丹前をひっかけ、長煙管でやに下ったところなど、どう見ても江戸前の親分だ。そのくせ自分では決して事件を解決しない。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Develop these right away," I said, removing my camera. "I also want you to trace the killer's background — there may be something behind all this."</div>
+        <div class="line-jp">「すぐに現像してくれ」と僕はカメラをはずしながらいった。「殺した奴の線からもたぐってほしいんだ。何かいわくがあるかも知れない」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"As for the murder, I'll have my underlings file a report at the guardhouse, so the woman's identity will eventually be uncovered by the town magistrate's men. You keep out of it — understood?"</div>
+        <div class="line-jp">「殺しのことは、こちらの下っぴきに、番所へとどけさせるから女の身もとはいずれ町方の方でわれるだろう。お前さんは見ねえことにしとくんだ。わかったな?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"A passing monk saw me there."</div>
+        <div class="line-jp">「通りすがりの坊主に見られてるぜ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Don't worry. Edo is full of mysterious disappearances and unsolved cases."</div>
+        <div class="line-jp">「大丈夫だよ。江戸にゃ神かくしや、迷宮入りがわんさとあるんだ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Wasuke and I went down to the basement to examine the photographs from the crime scene. When the ultra-high-sensitivity film was enlarged, the entire sequence of the crime was captured in order. The more I looked at Osato's face, the more she resembled Kazumi. When Wasuke saw the killer's face at the moment the tenugui slipped away, he let out a small exclamation.</div>
+        <div class="line-jp">和助と僕は地下室にいって、犯行現場の写真をしらべた。超高感度のフィルムを拡大すると犯行が順序を追うて、全部うつっていた。おさとの顔は見れば見るほどカズミに似ていた。手拭いのはずれた瞬間の兇漢の顔を見ると和助はちょっと声をたてた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Well, I'll be damned."</div>
+        <div class="line-jp">「こいつは驚いた」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Going back up to the sitting room, Wasuke slid open the small shoji screen and shouted toward the alley.</div>
+        <div class="line-jp">座敷へあがると、和助は小障子をあけて路地へむかってどなった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Kinta! Get over here!"</div>
+        <div class="line-jp">「金太! ちょっとこい!」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">From the back entrance, a scatterbrained-looking underling with a lopsided topknot came shambling in, pulling the front of his plain-lined kimono closed.</div>
+        <div class="line-jp">裏口から、髷の曲がった、おっちょこちょいらしい下っぴきが上がりこんで、素袷の前をかきあわせた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Have you heard anything about Nao coming back to Edo?"</div>
+        <div class="line-jp">「お前、直が江戸へかえって来たという話をきかねえか?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Well…" Kinta put on a blank face. "Come to think of it, Yaotats said he spotted him the other morning on his way back from the vegetable market at Tamachi."</div>
+        <div class="line-jp">「へえ……」金太はとぼけた顔をした。「そういえば八百辰がこないだの朝、多町の青物市のかえりに見かけたとか」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Don't give me that lame lie!" Wasuke snapped. "Where is he now?"</div>
+        <div class="line-jp">「どじなうそをつくな!」和助はついた。「やつァ今どこにいる」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Please let it go. Nao-aniki did me a good turn once…"</div>
+        <div class="line-jp">「勘弁しておくんなさい。直兄ィにゃ世話になったんで……」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"This isn't official business. Where is he?"</div>
+        <div class="line-jp">「お上の御用じゃねえ、どこにいるんだ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"He snuck back into town a little while ago. He's running a meal shop on Kudan Nakasaka."</div>
+        <div class="line-jp">「こないだうちから、こっそり帰って来て、九段中坂でめし屋をやってます」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Once Kinta left, I asked Wasuke: "Do you know the man?"</div>
+        <div class="line-jp">金太がでて行くと、僕は和助にきいた。「知ってる男か?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Kataoka Naojiro — Nao the Samurai. You don't know him? He was one of the associates of Kōchiyama Sōshun, who died just recently — a notorious villain. Someday Mokuami will put him on stage alongside Miyozuru and make quite a show of it, but in real life he's nothing as dashing as that — just a pathetic man. That very alley where the murder happened, Neribei Kōji, is where Kōchiyama used to live," Wasuke said, tying his sash. "In the daikon field next door, he once strangled his accomplice Gennosuke to death. — He was a man of some spirit, though."</div>
+        <div class="line-jp">「片岡直次郎――直侍だよ。知らないのか? 先だって死んだ河内山宗俊のとりまきで、有名な悪だ。いずれ黙阿弥が芝居にして三千歳とのひきで大そうなところを見せるが、実物はあんなイキのいいもんじゃなくてつまらねえ男さ。そういやァ殺しのあった練塀小路は、河内山の家のあったところだ。隣の大根畑で、源之助って相棒をしめ殺したこともある」と和助は帯をしめながらいった。「いい気質の男だったがな」</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 8 -->
+  <div class="section" id="s-w8">
+    <div class="section-header" onclick="toggle('s-w8')">
+      <div>
+        <div class="section-title">Week 8 — Quinn</div>
+        <div class="section-subtitle">Pages 44–47 (end of page) &ensp;·&ensp; Kudanzaka &amp; the Interrogation</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="passage">
+        <div class="line-en">We immediately set out by palanquin for Kudan Nakasaka. The curious conveyance of the palanquin, and the petty criminals of the Tenpō era, held absolutely no interest for me. I was more worried about straying too far from the matter of Kazumi's identity. But at this stage, there was nothing to do but follow every lead.</div>
+        <div class="line-jp">僕たちはそれからすぐ駕籠で九段中坂へむかった。駕籠という珍妙な乗物も、天保期の小悪党のことも、僕にはまったく興味がなかった。むしろカズミの身もとの件で、あまりわき道にそれてしまうのを恐れていた。だがこの段階では、あらゆることにあたって見るよりしかたがない。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">The area around Kudanzaka was a desolate place of nothing but samurai estates. Even so, around Nakasaka there were still a few lights from townspeople's houses. Wasuke pointed out the house where Kyokutei Bakin, who had just finished writing the Hakkenden, was living, but I had no interest in this grandiose and tedious classical author — though thinking back on it later, if I was going to pursue this case, I should have read at least a little of that sweeping tale of karma.</div>
+        <div class="line-jp">九段坂界隈は、屋敷町ばかりのさびしい場所だった。それでも中坂へんはまだ町家の灯が見えた。和助は、八犬伝を書きおえたばかりの曲亭馬琴のすんでいる家をおしえてくれたが、僕はこの壮大で退屈な古典作家にも興味はなかった――あとで考えてみると、この問題を追及するのなら、少しはこの雄大な因果話を読んでおくべきだったのだが。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Naojiro had closed his shop and was drinking sake from a tea bowl alone. Even seeing Wasuke, his lead-colored face didn't stir at all. He was a gaunt, grimy, utterly haggard-looking middle-aged man.</div>
+        <div class="line-jp">直次郎は店をしめて、一人で茶碗酒をのんでいた。和助を見ても、その鉛色の顔は少しも動かなかった。痩せて、垢じみて、すさみ切った感じの中年男だった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Nao-san," Wasuke said. "It's been a while."</div>
+        <div class="line-jp">「直さん」和助はいった。「ひさしぶりだな」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Wasuke, is it." Naojiro turned his glazed eyes toward him. "I hear you're still as useless as ever. Why don't you hand back that truncheon?"</div>
+        <div class="line-jp">「和助か」直次郎はどろんとした眼を向けた。「お前、あいかわらずちっとも働きがねえそうだな。十手を返したらどうだ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"As usual, this has nothing to do with the authorities," Wasuke said with quiet force. "Who was the woman you did in at Neribei Kōji tonight?"</div>
+        <div class="line-jp">「例によって、お上とは関係ねえ話だ」和助は押しのある声でいった。「今夜練塀小路でやった女は誰だえ?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"So that's the eyewitness, is it?" Naojiro cast a sharp glance at me.</div>
+        <div class="line-jp">「そいつが生き証人ってわけか?」直次郎はじろりと僕を見た。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"You left evidence behind as well," Wasuke said, tossing down the tenugui. "A towel from Ōguchiya, with the character for 'three' written on it. Sloppy work."</div>
+        <div class="line-jp">「証拠もおとして行きなすった」和助は手拭いをほうった。「大口屋の手拭いに、三の字が書いてある。どじな仕事だな」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"I went out toward Naka to shake someone down for pocket money," Nao the Samurai said, tipping back the tea bowl. "On the way back from finding the place empty, my feet just drifted toward the old neighborhood where my late brother used to live. As I was passing through, a woman came along carrying something that looked important…"</div>
+        <div class="line-jp">「小づかいせびりに吉原の近所まで行ってよ」直侍はぐいっと茶碗をあおった。「留守を食ってのかえりみち、つい昔なつかしい兄貴の家の近所に足がむいてな。通りすがりに、何か大事そうなものをかかえた女が通りかかったら……」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Nao-san, you've really gone downhill," Wasuke said bluntly. "The Nao the Samurai who teamed up with Kōchiyama and made a fool of the Lord of Unshu — and now you kill a young girl on a whim and rifle through her things? Kōchiyama, who got poisoned in Tenmacho, must be weeping in his grave. Miyozuru the courtesan will want nothing more to do with you."</div>
+        <div class="line-jp">「直さん、お前大そうやきがまわったね」和助はズケズケ言った。「河内山とくんで、雲州に一泡吹かせた直侍が、行きずりに、小娘殺してふところを探ったか。伝馬町で一服もられた河内山が、草葉のかげで泣くぜ。三千歳花魁もあいそをつかすだろうよ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Shut your mouth!" Naojiro shouted.</div>
+        <div class="line-jp">「やかましいやい!」直次郎はどなった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Hey, Nao!" Wasuke shouted right back. "I'm holding a truncheon, for what it's worth. If you try to play innocent over a murder, I'll drag you straight to the magistrate's office. There's already a crackdown on people coming and going in and out of Edo because of the repatriation law. Have you forgotten you're banned within ten ri of Edo?"</div>
+        <div class="line-jp">「おい、直!」和助も負けずにどなりかえした。「かりにも十手をあずかってるんだ。殺しでしらを切るならすぐ奉行所へつき出すぜ。たださえ人返しの法が出て、江戸の出入りはやかましい。十里江戸おかまいの身を忘れたか」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">A base smile crept across Naojiro's face.</div>
+        <div class="line-jp">直次郎の顔に卑しげな笑いがうかんだ。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"How much will you pay for this story?"</div>
+        <div class="line-jp">「この話、いくらで買う?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Two kirimochi."</div>
+        <div class="line-jp">「切餅二つ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Generous as always. You're not running some kind of scam, are you?"</div>
+        <div class="line-jp">「いつもながら大そう気前がいいな。盛ッパでもやってるんじゃねえか?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Don't be ridiculous! I'm nothing like Moritaya Seizō."</div>
+        <div class="line-jp">「ふざけるな! 森田屋清蔵たあわけがちがうぞ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">At the mention of Moritaya's name, Nao's face soured. He stuffed the fifty ryō Wasuke had laid out into his breast pocket and said:</div>
+        <div class="line-jp">直侍は森田屋の名をきくと、にがい顔をした。和助がならべた五十両の金をふところにねじこむと彼はいった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"I went to old Okuma's place in Torigoe just after the seven-and-a-half bell. The old woman was out, and while I was waiting inside, she came bursting in all in a panic, saying 'Nao-san, you've come at just the right time — lend me a hand.' She said a girl dressed in such-and-such a way had just fled toward Ueno, and if I ran her down she'd give me five ryō."</div>
+        <div class="line-jp">「七ッ半すぎに鳥越のお熊婆アの所へ行ったんだ。婆ァは留守で、上りこんでると、婆アが血相変えてとびこんで来て、直さんいいところへ来た。手を貸してくれっていうのよ。これこれこういう風体の娘が、たった今上野の方へ逃げた。おっかけてやってくれれば五両出すといいやがる」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Five ryō — how far Nao the Samurai has fallen," Wasuke muttered. "What about the baby the woman was carrying?"</div>
+        <div class="line-jp">「五両か、直侍も落ちたもんだ」和助はつぶやいた。「女が抱いてた赤ン坊のことは?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Didn't hear anything about a baby," Nao said, twisting his purple lips as if tasting something bitter. "On top of that, she told me to dispose of the bundle the woman was carrying as well — that old hag, since she does abortions for a living and thinks nothing of drowning newborns in straw mats, she goes and makes me her accomplice in infanticide."</div>
+        <div class="line-jp">「赤ン坊とはきかなかったな」直侍は紫色の唇を、苦いものでもなめたようにゆがめた。「ついでに女の持っている包みも始末してくれというんだ――あの婆ァ、手前が堕胎専門で、す巻きや水子が平気なもんだから、人を赤子殺しの片棒にしやがる」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">We turned back through the night roads toward Asakusa.</div>
+        <div class="line-jp">僕たちは、夜道を浅草へととってかえした。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">In a crumbling, desolate house standing between Torigoe and Mukoyanagi, old Okuma lay dead, drenched in blood.</div>
+        <div class="line-jp">鳥越と向う柳原のあいだに立った荒れ果てたひとつ家で、お熊婆アは朱けにそまって死んでいた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"It was Nao," Wasuke clicked his tongue. "They must have argued over money. Two murders in no time at all."</div>
+        <div class="line-jp">「直だな」和助は舌うちした。「金のことでもめたんだろう。ちょっとのあいだに二人殺しやがった」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">I had to spend a restless night at Wasuke's house, chafing with impatience. Nao the Samurai had cut one of the threads of the investigation to pieces, so I had to wait for the town magistrate's men to identify Osato.</div>
+        <div class="line-jp">僕はじりじりしながら、和助の家で一晩すごさねばならなかった。直侍が、捜査の糸の一本をめちゃくちゃにしてしまったので町方の方で、おさとの身もとがわれるのを待たねばならない。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"It smells like a clan succession dispute," I said. "Can we pursue that angle?"</div>
+        <div class="line-jp">「お家騒動のにおいがするな」と僕はいった。「その線からさぐれないか?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"There's no shortage of clan succession disputes — from the great lords and hatamoto right down to the households of humble townspeople," Wasuke said with a laugh. "Under feudal family law, such disputes are constantly occurring. You might say they're an everyday affair. — Try not to be so impatient."</div>
+        <div class="line-jp">「お家騒動といったって、大名旗本から零細町民の家にいたるまで、ごまんとある」和助は笑っていった。「封建家族制下では、お家騒動は常に起っている。いわば日常茶飯事だよ。――まあ焦らないことだな」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">More than impatience over the case, what I wanted more than anything was to get up and go back to the fortieth century. The last time I had visited this land, the Sea of Japan was still a lake, and mastodons were roaming through primeval forests. Entering a historical era was something I was doing for the first time. And the moment I had slipped into mid-nineteenth-century Edo, I felt the dark, grim shadow that lay in the background of my own blood begin to entangle me like a spider's web.</div>
+        <div class="line-jp">事件に対する焦りよりも、僕は一刻も早く起きて、四十世紀へ帰りたいと思った。――僕が以前この地を訪れたのは、まだ日本海が湖で、原始林の中をマストドンがうろつきまわっている時代だった。歴史の時代に入るのは、今度がはじめてだ。そして、この十九世紀の中葉の江戸に潜入したとたん、自分の血の背景にある、陰惨な古い影が、蜘蛛の糸のように僕をからめ出すのを感じた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Bureau agents undergo emotional training. The rule was that once you go back into a past era, no matter what horrors you see before your eyes, you must not form any decisive connection with them — but agents are human too. And the prohibition against an investigator influencing the past was pushing me toward psychological and emotional danger, something I felt acutely pressing in on me. The dark, murky, grim shadow that Nao the Samurai carried made my skin crawl. And further still, the bones of hundreds of infants found beneath the floor of old Okuma's house plunged me, beyond mere horror, into an inescapable grief. Knowing that infanticide was one of the unavoidable means of self-preservation for the poor, there was no way out of that grief.</div>
+        <div class="line-jp">時間局員は、感情的な訓練をうける。いったん過去の時代にさかのぼったら、どんな悲惨なものを眼前にしても、それと決定的な関係をもたないこと――局員だって人間だ。そしてまた、調査員が過去の時代に影響を与えてはならないという禁律が、僕を心理的・感情的な危険にむかって押しやったりして、ひしひしと感じていた。直侍のもつ、どす黒い、陰惨な影は、僕に鳥肌をたてさせた。そしてさらに、お熊婆ァの家の床下から出た、何百体という嬰児の骨は、戦慄を通りこして、僕をどうしようもない悲哀感にしずめた。嬰児虐殺が、貧しい人々にとってさけがたい自己保存の手段の一つだということを知っていただけに、その悲哀には出口がなかった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">The flower capital of Edo was a gray, dusty, dog-dung-laden town, huddled in a jumble amid plains and low hills. Only the samurai estates were absurdly grand and sprawling. The aftershocks of the great famine from a few years back had still not settled, and everywhere there were crowds of beggars, and from beneath the reed mats at the roadside protruded lead-colored legs of people who had collapsed and died. Most people lived like pigs, caked in filth, in the midst of starvation, disease, and political oppression. Thinking that these were my own ancestors, I felt an ache through my entire body.</div>
+        <div class="line-jp">花のお江戸は、草原と丘陵の中に、ごちゃごちゃかたまった、ほこりだらけ、犬の糞だらけの灰色の町だった。武家屋敷のみがいたずらに宏壮で、だだっぴろかった。数年前の大飢饉の余波がまだおさまらず、いたるところ乞食の群れがおり、道ばたの筵の下からは、行きだおれの鉛色の脚が出ていた。大部分の人たちは、飢餓と、疾病と、政治的圧力の中で、垢まみれになって豚のように生きていた。これが僕の先祖たちなのだと思うと、僕は全身がうずくように感じた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">In the span of these two days, Senior Councillor Mizuno Tadakuni had fallen from power following the failure of his land reform edict. The political upheaval in which wealthy merchants and daimyo had united in their common interests had nothing to do with ordinary people. No matter who rose or fell at the top, nothing in their cursed circumstances would change.</div>
+        <div class="line-jp">この二日の間に、老中水野忠邦は上地令の失敗から失脚した。富豪と大名が、利益の上で結束して行った政治上のごたごたなど、庶民には何の関係もなかった。上層部の誰がどうなろうと、彼等の呪われた境遇には、何の変化もないのだ。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">When Kinta came to tell me the next afternoon that Osato's identity had been determined, I honestly felt like jumping for joy. "A passing monk knew who she was, so we found out quickly, but I'd actually been doing some investigating on the side," Kinta said. "Apparently she was a peasant girl from around Negishi, and a little over a year ago she was taken on as a live-in servant at Tatsumiya Kago's second-hand clothing shop in Nihonbashi Tomizawacho, as security against a debt."</div>
+        <div class="line-jp">翌日の午後、金太がおさとの身もとがわかったことを知らせてきたときは、正直いってとび上りたい思いだった。「通りすがりの坊主が身もとを知ってたんで、すぐわかりましたが、実はいろいろしらべてたんで」と金太はいった。「何でも根岸へんの百姓の娘で、借金のかたに、一年とちょっと前から、日本橋富沢町の古手屋、辰巳屋進左衛門のところへ、仲働きにあがってたそうです」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Didn't Osato have a child?"</div>
+        <div class="line-jp">「おさとは子供を生んだんじゃねえか?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"You know your stuff, boss — Kago and his wife have no children of their own, but Osato was taken by Kago, and about three months ago she gave birth to a baby boy. Naturally it was to be the heir to the Tatsumiya house, and the Tatsumiyas are now raising the child."</div>
+        <div class="line-jp">「親分よく御存知で――進左衛門夫婦にゃ子供がないんですが、おさとの方は進左衛門の手がついて三月ほど前に男の子を生んだ。むろん辰巳屋のあととりにというんで、今辰巳屋がひきとって育ててます」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"So Osato was kept as a concubine, all room and board included?"</div>
+        <div class="line-jp">「それじゃおさとはお部屋さまでおかいこぐるみか?」</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 10 -->
+  <div class="section" id="s-w10">
+    <div class="section-header" onclick="toggle('s-w10')">
+      <div>
+        <div class="section-title">Week 10 — Quinn</div>
+        <div class="section-subtitle">Pages 48–50 (line 9) &ensp;·&ensp; The Twins</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="passage">
+        <div class="line-en">"That didn't seem to be the case — anyways, Shinzaemon is an adopted son."</div>
+        <div class="line-jp">「そうでもなかったようです、何しろ進左衛門は養子ですからね」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">In those days, there was a belief that a womb was something that you could borrow — especially if a concubine became the mistress of an adopted son, she could not hold her head too high even if she bore an heir.</div>
+        <div class="line-jp">このころには、腹は借り物という思想があって、特に婿養子の妾となれば、あととりをうんでも、それほど大きな顔はできない。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"What on earth was Osato doing running around the Shitaya area at that hour yesterday?"</div>
+        <div class="line-jp">「おさとはきのう、何だってあんな時刻に下谷へんを走ってたんだ?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"That's what's strange — Osato gave birth at the Tatsumiya lodging on Mukoujima island, and hadn't gone outside since. Yet early yesterday morning, a palanquin came from her guardian's house to fetch her, and she left in it — except her parents said they never sent one…"</div>
+        <div class="line-jp">「それがおかしいんで――おさとは向島の辰巳屋の寮で子を生んで、そのあとそのまま一足も外へ出なかった。ところがきのうのハツすぎに親もとからむかえの駕籠が来て、それにのって出てったっていうんですが―――親もとの方じゃ、そんなむかえをやったおぼえはねえっていうんで……」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"So perhaps she went to Okuma's place on the palanquin…" Wasuke crossed his arms. "Wait — did Osato take the child with her?"</div>
+        <div class="line-jp">「するとその駕籠でお熊のところへ行ったのかな……」和助は腕を組んだ。「ちょいときくが、おさとは子供をつれて行ったのか?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"There's no way she could have. The precious heir was taken in by the Tatsumiyas the moment he was born, and the wet nurse Okane — who looks like Bishamonten — won't let the child leave her side, not even to see his birth mother."</div>
+        <div class="line-jp">「つれて行けるわけてァねえでしょう。大事なあととりさまは、生れるとすぐ辰巳屋にひきとられて、乳母のおかねという毘沙門天みたいなのが、御用大事にわきからはなさねえ、生みの親のおさとにもあわせねえって話ですぜ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Strange," Wasuke said, sinking into thought. "Did you go to Tatsumiya yourself?"</div>
+        <div class="line-jp">「妙な具合だな」和助は考えこんだ。「おめえ辰巳屋へ行ってみたか?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Sankichi went."</div>
+        <div class="line-jp">「三公が行きやした」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Wasn't there some commotion in the back of the Tatsumiya house?"</div>
+        <div class="line-jp">「辰巳屋の奥で、何かさわぎがおこっていなかったかえ?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"There weren't any signs of that — they're a cold lot. After their heir's birth mother died, all they told her family was that they'd write off their debts instead of a funeral offering."</div>
+        <div class="line-jp">「そんな気配はありませんぜ――不人情なもんで、あととりの母親が死んだっていうのに、親もとには、香奠がわりに借金は棒にひいてやるといったそうで」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Then who was the baby Osato was holding when she was killed?" Wasuke said after Kinta had left. "In the end, whose child is Kazumi?"</div>
+        <div class="line-jp">「するとおさとが殺された時、抱いていた赤ン坊ってのは誰だろう?」金太が出て行くと和助はいった。「結局カズミは誰の子だ?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Osato's child," I said, unable to contain my excitement. "Like the Corsican brothers — Osato gave birth to twins!"</div>
+        <div class="line-jp">「おさとの子だよ」僕は興奮をおさえきれずにいった。「コルシカの兄弟さ――おさとは双生児をうんだんだ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Of course — that's how it all makes sense!" Wasuke slapped his knee. "It was a conspiracy by the wife of the Tatsumiya household."</div>
+        <div class="line-jp">「なるほどそれで筋がとおる!」和助はひざをたたいた。「辰巳屋の家つき女房の一統がたくらんだんだな」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Osato had one of the twins taken in by the Tatsumiyas, and she must have refused to let go of the other one," I said, feeling a bitter taste rise in my mouth. "So the Tatsumiyas, thinking it would be trouble later on, sent a fake palanquin and lured her to Okuma's place — all so that Okuma would dispose of Kazumi. Perhaps since the wife had already secured an heir, she intended to have Osato killed too."</div>
+        <div class="line-jp">「おさとは、ふた児の片方を、辰巳屋にもって行かれたんで、残った方をはなすまいとしたんだろうな」僕は苦い唾がわくのをかんじながらいった。「それを辰巳屋の方は、あとあと面どうだと思って、にせのむかえをやってお熊のところへつれこんだ。――お熊にカズミを始末させるためさ。ひょっとすると女房の方はあととりはできたし、おさとも殺させるつもりだったのかもしれないね」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"That seems very likely," Wasuke murmured, stroking his jaw. "There's no way an adopted husband could stay calm when his woman shows up. She waited until the woman produced an heir, then had her killed as revenge against her husband — the women of Edo are terrifying."</div>
+        <div class="line-jp">「大いにありそうなことだ」和助は顎をなでながらつぶやいた。「養子の旦那に、女ができて、冷静でいられるわけはないからな。女にあととりができるのを待って旦那へのしかえしに殺してしまう―――江戸の女はおそろしいな」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">I asked Wasuke to obtain a photograph, fingerprints, and blood type of Shinnosuke, the Tatsumiya heir, for verification. When I checked these against the fortieth century, my father came back with an excited voice saying there was no doubt that Kazumi and Shinnosuke were identical twins.</div>
+        <div class="line-jp">僕は確認のために、和助にたのんで、辰巳屋のあととり進之丞の、写真と指紋と血液型をとってもらった。これを四十世紀に照会すると、おやじは興奮した声で、カズミと進之丞が、一卵性双生児にちがいないといってきた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"That solves half the problem, it would seem." Dr. Duclos's voice was smooth and calm — a voice from the fortieth century.</div>
+        <div class="line-jp">「これで問題は半分解決したようものですな」デュクロ博士の声は、なめらかで、冷静だった。―――四十世紀の声だ。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"At any rate, we now understand the connection between the patient and the past. It seems almost certain that the cause of the illness is a kind of twin-to-twin telepathy syndrome. Shinnosuke, Kazumi's brother, almost certainly fell ill with the same condition at around the age of twenty-four. Please investigate the cause of the illness on your end."</div>
+        <div class="line-jp">「とにかく患者と過去のつながりはわかりました。病因が双生児交感現象の一種であることは、まずまちがいなさそうです。進之丞というカズミさんの兄弟は、おそらく二十四歳ごろ、同様の病気にかかっているにちがいありません。そちらの方で、一つ病気の原因をしらべてください」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"But if, hypothetically, the cause of the illness were discovered," I said, thinking it through as I spoke, "what would happen if the cause couldn't be removed? That is to say, what if curing Shinnosuke would contradict established historical fact?"</div>
+        <div class="line-jp">「で、もしかりにその病気の原因がわかったとしてですね」僕は考え考えいった。「その病因がとりのぞけなかったらどうするんです? つまり、進之丞をなおすことが、歴史的事実に反するとしたら?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"If the cause becomes clear, we'll try to find some way to deal with it," the doctor said hesitantly. "In any case, we have no choice but to press forward."</div>
+        <div class="line-jp">「病因がわかれば、何とか手をうってみます」博士はためらいがちにいった。「とにかく進むよりしかたありません」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Following the doctor's instructions, I jumped to the point in time corresponding to exactly one year and three months before the day Kazumi fell ill. The sixth month of Keio 2 — at this point in time, Shinnosuke too must have fallen ill.</div>
+        <div class="line-jp">僕は博士の指示にしたがって、カズミが発病した一年三か月前の当日に相当する時点にとんだ。慶応二年六月――この時点において、進之丞もまた、発病しているはずである。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Edo in the second year of Keio was filled with an atmosphere of unrest. The situation at home and abroad grew more tense by the day, and the citizens of Edo were struggling under a ferocious rise in prices. Peasant uprisings breaking out across the land were approaching the highest number ever recorded in the Tokugawa era. Through those streets I hurried from my base in the mountains of Ueno toward the Tatsumiya in Nihonbashi Tomizawacho. I intended to seek a direct audience with Shinnosuke.</div>
+        <div class="line-jp">慶応二年の江戸は、不穏の情勢にみちていた。内外の情勢は、日々に緊迫をつげ、江戸市民は猛烈な物価騰貴にあえいでいた。各地で起っている百姓一揆は、徳川時代最高の件数にのぼろうとしていた。そんな街中を、僕は上野山中の基地から、日本橋富沢町の辰巳屋へ急いだ。直接進之丞に面会をもとめるつもりだったのである。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 11 -->
+  <div class="section" id="s-w11">
+    <div class="section-header" onclick="toggle('s-w11')">
+      <div>
+        <div class="section-title">Week 11 — Lauren</div>
+        <div class="section-subtitle">Pages 50–52 (line 14) &ensp;·&ensp; Shinnosuke's Fate &amp; the Monk</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="passage">
+        <div class="line-en">However, when I arrived at my destination, the state of the place was completely different from twenty-four years before — the Tatsumiya shop was gone. I was told that in the great earthquake ten years ago — the famous Ansei earthquake — the shop had burned down and the entire family had been wiped out. Shocked, I asked whether the child called Shinnosuke had also died. An old resident told me that the son had been away and survived, and that he had been taken in by his wet nurse's family in Muramatsu.</div>
+        <div class="line-jp">ところがたずねて行った辰巳屋の様子は、二十四年前とがらりと変っていた。辰巳屋の店がなくなってしまったのだ。きけば十年前の大地震――それがあの有名な安政の大地震だったが――店がやけ、一家根だやしになったという。僕はおどろいて、進之丞という子供も死んだのかときいて見た。すると古くからすむ人が、息子はよそに行っていて助かり、乳母の家へひきとられたはずだと教えてくれた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">I barely managed to find the house of the wet nurse Okane in Muramatsu. What I found was a small house tucked away at the back of an alley. When I arrived, there appeared to have been some kind of commotion, and people were gathered to clean up the mess. I asked a man coming out of the alley what had happened.</div>
+        <div class="line-jp">やっとさがしあてた村松町のおかねの家は、路地の奥の小さな家だった。ついたとき、そのあたりにはとりこみごとがあったらしく、人があつまってあとかたづけをやっていた。僕は、露地から出て来た男に、何があったかきいて見た。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"The young fellow at old Okane's place has died, it seems," the man wearing a yukata said idly, a toothpick dangling from his mouth. "The funeral just finished. It was a long illness."</div>
+        <div class="line-jp">「おかね婆さんのところのわけえもンが死んでようにね」浴衣に銜え楊枝の男はのんびりといった。「今しがた葬礼が出たところだ。なげえわずらいだったよ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Who died?" I asked, the color draining from my face. "Surely it wasn't Shinnosuke…"</div>
+        <div class="line-jp">「死んだのは誰です?」僕はまっさおになってきいた。「まさか、じゃ……」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"You know him? He was a smug, dandyish fellow who had made a name for himself among the Oyama street lads, but ever since he came back four or five years ago, he had been wandering around sick. In the end, he was in terrible pain every night. People were saying he must have caught the eye of one of the Shinobazu snakes or something — and then last night, just like that, he was gone."</div>
+        <div class="line-jp">「お前さん知ってなさるのか? 上野の若衆に上ってたにやけた野郎だが、四、五年前に帰ってきてから、ぶらぶら病いになって、しまいにやア毎晩大変な苦しみようさ。不忍の蛇にでも見こまれたんだろうといってたが、ゆんべぽっくり……」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"They say his body was covered in dark bruises."</div>
+        <div class="line-jp">「仏さまは、青あざだらけだったってよ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">A woman with a marumage hairstyle cut in.</div>
+        <div class="line-jp">丸まげのかみさんが口をはさんだ。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Oh, how dreadful — let's hope it isn't cholera or some other epidemic."</div>
+        <div class="line-jp">「おおいやだ、虎列刺か何か流行病でなきゃいいけどね」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">I was dumbfounded. — What on earth did this mean? Shinnosuke had clearly died of the same illness as Kazumi, but his illness had begun four or five years before Kazumi fell ill, and on the very day Kazumi fell ill, Shinnosuke had died.</div>
+        <div class="line-jp">僕は呆然とした。――これはどういうことになるのだろう。進之丞は明らかにカズミと同じような病気にかかって死んだのだが、それはカズミが発病する四、五年も前にはじまっている、そしてカズミの発病した日に、進之丞は死んでいるのである。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">As the Corsican brothers example shows, the twin relation phenomena normally occur almost simultaneously — when one twin falls ill, the other falls ill with the same sickness at the same time. But in this case, it is almost as if one twin's illness had been passed on to the other. What could this mean? Was it that the cause of the T.D. that had afflicted Shinnosuke had, after his death, begun to act upon Kazumi instead? And would Kazumi too end up like Shinnosuke? — In any case, to determine the cause of the illness, I would have to go back to the time when Shinnosuke was still alive. No, even if I went back — Shinnosuke ultimately died of an illness with an unknown cause.</div>
+        <div class="line-jp">コルシカの兄弟の例を見てもわかるように双生児感応現象は、通常一方が病気にかかると、他方も同じ時に、同じ病気にかかるというふうに、ほとんど同時に起る。それがこの場合は、一方の病気を他方がひきついだような形になっているのだ。これはどういうことか? 進之丞を苦しめたT・Dの原因が、進之丞の死後、今度はカズミに作用し出したというのか? そしてカズミもまた進之丞のように―――いずれにしても病因をたしかめるためには、進之丞の生きている当時にさかのぼらなくてはなるまい。いや、さかのぼったところで――進之丞は結局原因不明の病気で死んでいるのである。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">Wandering about in bewilderment, I somehow found myself at the back of Jōanji temple, where Shinnosuke was said to have been buried. Peering through the fence, I could see a fresh white wooden grave marker beyond the stone monuments in the cemetery, and crouched before it was a traveling monk, reciting a sutra. When I heard his voice, my heart gave a sudden jolt. Before I knew it I had climbed over the fence, slipped into the cemetery, gone around behind the monk, and called out to him.</div>
+        <div class="line-jp">僕は途方にくれて歩きまわりながら、何となく進之丞のほうむられたという浄安寺の裏手まで来てしまった。垣根ごしにのぞくと、墓地の石塔の向うにまあたらしい白木の卒塔婆が見え、前に一人の旅僧がうずくまって経を読んでいた。その声をきくと、僕はハッと胸をつかれた。思わず垣根をこえ、墓地にはいりこみ、僧侶の後へまわって、声をかけた。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">The monk who turned around was a man of about fifty, his cheeks wet with tears. When I saw his face I nearly leapt out of my skin. It was without doubt the monk I had encountered in Neribei Kōji twenty-four years before. No wonder even a single glimpse in the darkness had felt somehow familiar — the monk's face was the living image of Kazumi.</div>
+        <div class="line-jp">ふりかえった五十年輩の僧侶は、頬を涙でぬらしていた。その顔を見て、僕はとび上るほどおどろいた。それは二十四年前、練塀小路でぶつかった僧にちがいなかった。暗がりの中の一瞥でさえ、見たことがあるような気がしたのも道理、僧侶の顔はカズミに生きうつしだったのである！</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Can I help you?" the monk said.</div>
+        <div class="line-jp">「何か御用かな?」と僧侶はいった。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">I asked, flustered: "Is this the grave of someone related to you?"</div>
+        <div class="line-jp">僕はどぎまぎしながら、きいた。「どなたか、御縁筋のお墓で?」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"It is," the monk said, his voice clouded with tears. "My own son."</div>
+        <div class="line-jp">「さよう」僧侶の声は涙にくもった。「わしの実の息子ですじゃ」</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">I sat down on the steps of the main hall and listened to the monk's unexpected story. The more I heard, the more tangled it became. — Shinzaemon of the Tatsumiya had fathered no children not only with his wife, but with several mistresses as well. And Osato, the one woman who had conceived — had already been with child when she entered service at the Tatsumiya.</div>
+        <div class="line-jp">僕は、本堂の階段に腰をおろして、僧侶の意外な話をきいた。きけばきくほどこんがらがった話だった。――辰巳屋の進左衛門は、妻だけでなく、数人の妾にも子ができなかった。そしてただ一人、子供ができたおさとは――辰巳屋の奉公に上る時、すでに子供を宿していたのである。</div>
+      </div>
+      <div class="passage">
+        <div class="line-en">"Twenty-five years ago, I had a small hermitage in the village of Negishi," the monk said, his eyes taking on a faraway look. "Osato was a girl from the neighborhood who often used to bring me food and look after me. — This was partly because, despite being strangers, our faces looked so remarkably alike that the people around us used to tease us and say we must have been brother and sister in a previous life. And so Osato naturally grew attached to me as though I were her elder brother."</div>
+        <div class="line-jp">「二十五年前、わしは根岸の里に庵をむすんでおってな」僧侶は、夢見るような目付きでいった。「おさとは、近所の娘で、よく食物の世話などしてくれた。――それというのも、他人同士でありながら、わしたち二人の顔だちがあまりよく似ているので、近所の人たちは前世で兄妹であったのだろうといってはやしたりしたからじゃ。それでおさとも自然、わたしに兄のようになついていた」</div>
+      </div>
+
+      <div class="translator-note">⟡ Weeks 12 and 13 not yet translated.</div>
+    </div>
+  </div>
+
+  <a href="#" class="top-link" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Return to Top</a>
+
+</div>
+
+<script>
+function toggle(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+function expandAll() {
+  document.querySelectorAll('.section').forEach(s => s.classList.add('open'));
+}
+
+function collapseAll() {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('open'));
+}
+</script>
+</body>
+</html>
