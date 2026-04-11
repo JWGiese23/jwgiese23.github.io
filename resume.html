@@ -3,229 +3,645 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Joshua Giese | Portfolio</title>
+  <title>Joshua Giese — Resume &amp; Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+JP:wght@300;400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a1410;
+      --paper: #f5f0e8;
+      --aged: #e8dfc8;
+      --accent: #8b3a2a;
+      --gold: #b8952a;
+      --muted: #6b5d4f;
+      --border: #c8b99a;
+      --jp-line: #d4c5a9;
+      --shadow: rgba(26,20,16,0.12);
+    }
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', 'Noto Serif JP', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.8;
+      min-height: 100vh;
+    }
 
-  <link rel="stylesheet" href="style.css">
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(180,160,120,0.04) 28px),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 32px 80px;
+    }
+
+    /* ── Title Block ── */
+    .title-block {
+      text-align: center;
+      padding: 64px 0 48px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    .title-block::before {
+      content: '◆';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--gold);
+      font-size: 12px;
+      background: var(--paper);
+      padding: 0 8px;
+    }
+
+    .title-jp {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 16px;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .title-en {
+      font-family: 'Cinzel', serif;
+      font-size: 38px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+
+    .title-sub {
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ── Controls / nav ── */
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 28px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      border-radius: 1px;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .ctrl-btn:hover {
+      background: var(--aged);
+      color: var(--ink);
+      border-color: var(--muted);
+    }
+
+    .ctrl-divider {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      min-width: 20px;
+    }
+
+    /* ── Sections (collapsible) ── */
+    .section {
+      margin-bottom: 6px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      background: rgba(255,253,248,0.6);
+      box-shadow: 0 1px 4px var(--shadow);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      cursor: pointer;
+      user-select: none;
+      background: var(--aged);
+      border-bottom: 1px solid transparent;
+      transition: background 0.2s, border-color 0.2s;
+      gap: 16px;
+    }
+
+    .section-header:hover { background: #dfd5be; }
+
+    .section.open .section-header { border-bottom-color: var(--border); }
+
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      flex: 1;
+    }
+
+    .section-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .section-chevron {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      color: var(--muted);
+      transition: transform 0.3s ease;
+    }
+
+    .section.open .section-chevron { transform: rotate(180deg); }
+
+    .section-body {
+      display: none;
+      padding: 32px 36px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .section.open .section-body { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Content typography ── */
+    .entry {
+      margin-bottom: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px dotted var(--jp-line);
+    }
+
+    .entry:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .entry-title {
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    .entry-meta {
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+
+    .entry-body {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1.8;
+    }
+
+    .entry-body ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 12px;
+    }
+
+    .entry-body ul li {
+      padding-left: 1.4em;
+      position: relative;
+      margin-bottom: 4px;
+    }
+
+    .entry-body ul li::before {
+      content: '·';
+      position: absolute;
+      left: 0.3em;
+      color: var(--gold);
+      font-size: 1.2em;
+      line-height: 1.6;
+    }
+
+    .skills-label {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin: 16px 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .skills-label::before, .skills-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Skills inline tags */
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .tag {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 3px 10px;
+      border: 1px solid var(--border);
+      border-radius: 1px;
+    }
+
+    /* Hero intro block */
+    .hero {
+      padding: 40px 36px 36px;
+      background: rgba(255,253,248,0.6);
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 4px var(--shadow);
+      margin-bottom: 6px;
+    }
+
+    .hero p {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.85;
+      max-width: 580px;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      margin-top: 20px;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 8px 20px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .hero-cta:hover {
+      background: var(--aged);
+      color: var(--ink);
+      border-color: var(--muted);
+    }
+
+    /* Project cards */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 4px;
+    }
+
+    .project-card {
+      border: 1px solid var(--border);
+      padding: 20px 22px;
+      background: rgba(255,253,248,0.5);
+      transition: box-shadow 0.2s;
+    }
+
+    .project-card:hover {
+      box-shadow: 0 3px 12px var(--shadow);
+    }
+
+    .project-card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .project-card-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* Scroll to top */
+    .top-link {
+      display: block;
+      text-align: center;
+      margin-top: 48px;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .top-link:hover { opacity: 1; }
+  </style>
 </head>
-
-<script src="homeButton.js"></script>
-  
 <body>
+<div class="wrapper">
 
-<nav class="navbar navbar-light bg-light d-lg-none">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#sidebar"
-      aria-controls="sidebar"
-      aria-expanded="false"
-      aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <!-- Title -->
+  <div class="title-block">
+    <div class="title-jp">経歴とポートフォリオ</div>
+    <div class="title-en">Joshua Giese</div>
+    <div class="title-sub">Global Communications &ensp;·&ensp; Japanese &ensp;·&ensp; UWM Class of 2026</div>
   </div>
-</nav>
-  
-<div class="container-fluid">
-  <div class="row">
 
-    <!-- Sidebar -->
-    <nav class="col-lg-3 col-12 bg-white shadow-sm p-4 collapse d-lg-block" id="sidebar">
-      <h2 class="mb-4">Joshua Giese</h2>
-      <ul class="nav flex-column mt-4">
-        <li class="nav-item"><a class="nav-link" href="#education">Education</a></li>
-        <li class="nav-item"><a class="nav-link" href="#experience">Professional Experience</a></li>
-        <li class="nav-item"><a class="nav-link" href="#extracurricular">Extracurricular</a></li>
-        <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
-      </ul>
-      <div class="mt-4">
-        <a href="mailto:jwgiese23@gmail.com">jwgiese23@gmail.com</a>
+  <!-- Controls -->
+  <div class="controls">
+    <button class="ctrl-btn" onclick="expandAll()">Expand All</button>
+    <button class="ctrl-btn" onclick="collapseAll()">Collapse All</button>
+    <div class="ctrl-divider"></div>
+    <a class="ctrl-btn" href="https://jwgiese23.github.io/index.html">← Home</a>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <p>Global Communications &amp; Japanese major focused on international marketing, cross-cultural communication, and data-driven campaign strategy. Currently finishing a BA at the University of Wisconsin–Milwaukee, with study abroad experience at Nanzan University in Nagoya.</p>
+    <a href="mailto:jwgiese23@gmail.com" class="hero-cta">jwgiese23@gmail.com</a>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="section open" id="s-education">
+    <div class="section-header" onclick="toggle('s-education')">
+      <div>
+        <div class="section-title">Education</div>
+        <div class="section-subtitle">University of Wisconsin–Milwaukee &ensp;·&ensp; Nanzan University</div>
       </div>
-    </nav>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
 
-    <!-- Main Content -->
-    <main class="col-lg-9 p-5">
+      <div class="entry">
+        <div class="entry-title">University of Wisconsin–Milwaukee</div>
+        <div class="entry-meta">September 2022 – May 2026 &ensp;·&ensp; Milwaukee, Wisconsin</div>
+        <div class="entry-body">
+          <ul>
+            <li>BA in Global Communications and Japanese</li>
+            <li>GPA: 3.8</li>
+            <li>Relevant Coursework: Business Writing, Business Administration</li>
+          </ul>
+        </div>
+      </div>
 
-      <!-- Home -->
-        <section id="home" class="mb-5">
-          <div class="row align-items-center">
-            <div class="col-lg-6">
-              <h1 class="display-4 fw-bold">Joshua Giese</h1>
-              <p class="lead">
-                Global Communications & Japanese major focused on international marketing,
-                cross-cultural communication, and data-driven campaign strategy.
-              </p>
-              <a href="#experience" class="btn btn-dark mt-3 px-4 py-2">
-                View Experience
-              </a>
-            </div>
-            <div class="col-lg-6 text-center">
-              <img src="images/banner-image.jpg"
-                   class="img-fluid rounded shadow"
-                   alt="Banner Image">
-            </div>
-          </div>
-        </section>
+      <div class="entry">
+        <div class="entry-title">Nanzan University — Study Abroad</div>
+        <div class="entry-meta">September 2023 – May 2024 &ensp;·&ensp; Nagoya, Japan</div>
+        <div class="entry-body">
+          <ul>
+            <li>Relevant Coursework: Advertising Campaigns in Japan, Management Sciences</li>
+          </ul>
+        </div>
+      </div>
 
-      <!-- EDUCATION -->
-      <section id="education" class="mb-5">
-        <h2>EDUCATION</h2>
+    </div>
+  </div>
 
-        <h4>University of Wisconsin Milwaukee</h4>
-        <p>Sept 2022 - May 2026*</p>
-        <ul>
-          <li>BA in Global Communications and Japanese</li>
-          <li>GPA: 3.8</li>
-          <li>Relevant Coursework:
-            <ul>
-              <li>Business Writing, Business Administration,</li>
-            </ul>
-          </li>
-        </ul>
+  <!-- PROFESSIONAL EXPERIENCE -->
+  <div class="section" id="s-experience">
+    <div class="section-header" onclick="toggle('s-experience')">
+      <div>
+        <div class="section-title">Professional Experience</div>
+        <div class="section-subtitle">Marketing · Logistics · Retail</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
 
-        <h4>Nanzan University (Study Abroad)</h4>
-        <p>Sept 2023 – May 2024</p>
-        <ul>
-          <li>Relevant Coursework:
-            <ul>
-              <li>Advertising campaigns in Japan, Management Sciences</li>
-            </ul>
-          </li>
-      </section>
-
-      <!-- PROFESSIONAL EXPERIENCE -->
-      <section id="experience" class="my-5">
-        <h2 class="mb-4">Professional Experience</h2>
-        <div class="card mb-4 shadow-sm border-0">
-          <div class="card-body">
-            <h4 class="card-title">Retail Sales Associate - BoxLunch (Seasonal)</h4>
-            <p class="text-muted">November 2025 – February 2026<br>
-            Wauwatosa, Wisconsin, USA</p>
-              <ul>
-                <li>Delivered customer service in a seasonal retail environment, assisting customers during peak holiday hours.</li>
-                <li>Managing and restocking shipments to the store and customers to keep the sales floor fully stocked.</li>
-                <li>Handled transactions, customer inquiries, loyalty acquisitions, and in-store events.</li>
-              </ul>
-            <p class="fw-semibold mt-3">Skills Acquired:</p>
-              <ul>
-                <li>POS system operation</li>
-                <li>Inventory management and organization</li>
-                <li>Visual merchandising basics</li>
-              </ul>
+      <div class="entry">
+        <div class="entry-title">Retail Sales Associate — BoxLunch (Seasonal)</div>
+        <div class="entry-meta">November 2025 – February 2026 &ensp;·&ensp; Wauwatosa, Wisconsin</div>
+        <div class="entry-body">
+          <ul>
+            <li>Delivered customer service in a seasonal retail environment during peak holiday hours.</li>
+            <li>Managed and restocked shipments to keep the sales floor fully stocked.</li>
+            <li>Handled transactions, customer inquiries, loyalty acquisitions, and in-store events.</li>
+          </ul>
+          <div class="skills-label">Skills Acquired</div>
+          <div class="tag-list">
+            <span class="tag">POS Systems</span>
+            <span class="tag">Inventory Management</span>
+            <span class="tag">Visual Merchandising</span>
           </div>
         </div>
-        <div class="card mb-4 shadow-sm border-0">
-          <div class="card-body">
-            <h4 class="card-title">Marketing Intern - Trade Press Media Group (Summer 2025)</h4>
-            <p class="text-muted">June 2025 – August 2025<br>
-            Wauwatosa, Wisconsin, USA</p>
-              <ul>
-                <li>Collaborated with the marketing, design, and editorial teams to develop campaign messaging, track engagement, and support event promotion efforts.</li>
-                <li>Producing and organizing marketing Emails/Social media posts to help promote the company’s brands and industry trade shows to over 150,000 recipients.</li>
-                <li>Created multiple Persona analyses for two of the four main industry groups. Each broke the targeted industries down into five marketable categories.</li>
-                <li>Researched and analyzed the potential impacts of American tariffs on the global supply chain, and the freight rail industry, one of the company’s customer bases.</li>
-              </ul>
-            <p class="fw-semibold mt-3">Skills Acquired:</p>
-              <ul>
-                <li>Group teamwork and project management through programs like Freedcamp</li>
-                <li>Buyer analysis across two B2B verticals.</li>
-                <li>Data collection and analysis through Omeda and Google Analytics.</li>
-                <li>Market Research and Industry Analysis through a Competitive Analysis.</li>
-                <li>Fundamental HTML experience through the editing of email source code.</li>
-              </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-title">Marketing Intern — Trade Press Media Group</div>
+        <div class="entry-meta">June 2025 – August 2025 &ensp;·&ensp; Wauwatosa, Wisconsin</div>
+        <div class="entry-body">
+          <ul>
+            <li>Collaborated with marketing, design, and editorial teams to develop campaign messaging, track engagement, and support event promotion to over 150,000 recipients.</li>
+            <li>Created persona analyses for two of four main industry groups, breaking each into five marketable categories.</li>
+            <li>Researched and analyzed the potential impacts of American tariffs on the global supply chain and freight rail industry.</li>
+          </ul>
+          <div class="skills-label">Skills Acquired</div>
+          <div class="tag-list">
+            <span class="tag">Project Management</span>
+            <span class="tag">B2B Buyer Analysis</span>
+            <span class="tag">Google Analytics</span>
+            <span class="tag">Omeda</span>
+            <span class="tag">HTML Email</span>
+            <span class="tag">Market Research</span>
           </div>
         </div>
-      
-        <!-- Job 3 -->
-        <div class="card mb-4 shadow-sm border-0">
-          <div class="card-body">
-      
-            <h4 class="card-title">Inventory Replenishment Operator - Lineage Logistics (Full-Time/Seasonal)</h4>
-            <p class="text-muted">October 2021 – October 2024<br>
-            Waukesha, Wisconsin, USA</p>
-      
-            <ul>
-              <li>Picking and putting away palletized food units for freezer inventory or outbound shipping. This was done using a reach truck or electric pallet jack. Inventory management included recording materials, weight, counts, and condition of food items via a Radio Frequency system.</li>
-            </ul>
-      
-            <p class="fw-semibold mt-3">Skills Acquired:</p>
-            <ul>
-              <li>Reach truck and electric pallet jack Certification.</li>
-              <li>Organizational skills through the use of the inventory computer system.</li>
-              <li>Team and leadership skills through being the team lead of the replenishment department.</li>
-            </ul>
-      
+      </div>
+
+      <div class="entry">
+        <div class="entry-title">Inventory Replenishment Operator — Lineage Logistics</div>
+        <div class="entry-meta">October 2021 – October 2024 &ensp;·&ensp; Waukesha, Wisconsin</div>
+        <div class="entry-body">
+          <ul>
+            <li>Picked and put away palletized food units for freezer inventory and outbound shipping using a reach truck and electric pallet jack.</li>
+            <li>Recorded materials, weight, counts, and condition of food items via a Radio Frequency inventory system.</li>
+            <li>Served as team lead of the replenishment department.</li>
+          </ul>
+          <div class="skills-label">Skills Acquired</div>
+          <div class="tag-list">
+            <span class="tag">Reach Truck Certified</span>
+            <span class="tag">Inventory Systems</span>
+            <span class="tag">Team Leadership</span>
           </div>
         </div>
-      
-      </section>
-      
-      <!-- EXTRACURRICULAR -->
-      <section id="extracurricular" class="mb-5">
-        <h2>EXTRACURRICULAR</h2>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- EXTRACURRICULAR -->
+  <div class="section" id="s-extra">
+    <div class="section-header" onclick="toggle('s-extra')">
+      <div>
+        <div class="section-title">Extracurricular</div>
+        <div class="section-subtitle">Competitions &ensp;·&ensp; Awards</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="entry">
+        <div class="entry-body">
           <ul>
             <li>Participation in the Fall 2024 Gerald J. Alred Professional Writing Competition</li>
-            <li>First Place Prize in the 12th Annual UWM Japanese Speech and Recitation Contest</li>
+            <li>First Place Prize — 12th Annual UWM Japanese Speech and Recitation Contest</li>
           </ul>
-      </section>
-
-      <!-- SKILLS -->
-      <section id="skills">
-        <h2>SKILLS</h2>
-
-        <ul>
-          <li><strong>Technical Skills:</strong> Microsoft Office Suite (Word, Excel, PowerPoint), Microsoft Access, Omeda, Google Analytics, Fundamental HTML</li>
-          <li><strong>Languages:</strong> Japanese (Intermediate), English (Fluent)</li>
-          <li><strong>Practical Skills:</strong> Scheduling, Business Writing, Organization, Logistics, Leadership, Time Management, Professional Communication</li>
-        </ul>
-      </section>
-
-      <!-- Projects -->
-      <section id="portfolio" class="my-5">
-        <h2 class="mb-4">Selected Work</h2>
-      
-        <div class="row g-4">
-          
-          <div class="col-md-6 col-lg-4">
-            <div class="card border-0 shadow-sm">
-              <img src="images/project1.jpg" class="card-img-top" alt="Project 1">
-              <div class="card-body">
-                <h5 class="card-title">Persona Analysis Project</h5>
-                <p class="card-text">Marketing segmentation research for B2B industries.</p>
-              </div>
-            </div>
-          </div>
-      
-          <div class="col-md-6 col-lg-4">
-            <div class="card border-0 shadow-sm">
-              <img src="images/project2.jpg" class="card-img-top" alt="Project 2">
-              <div class="card-body">
-                <h5 class="card-title">Email Campaign Development</h5>
-                <p class="card-text">HTML-based promotional campaigns for trade shows.</p>
-              </div>
-            </div>
-          </div>
-      
         </div>
-      </section>
-      
-      <!-- Contact -->
-      <section id="contact">
-        <h2>Contact</h2>
-        <p>Email: <a href="mailto:jwgiese23@gmail.com">jwgiese23@gmail.com</a></p>
-      </section>
-    </main>
+      </div>
+    </div>
   </div>
+
+  <!-- SKILLS -->
+  <div class="section" id="s-skills">
+    <div class="section-header" onclick="toggle('s-skills')">
+      <div>
+        <div class="section-title">Skills</div>
+        <div class="section-subtitle">Technical &ensp;·&ensp; Languages &ensp;·&ensp; Practical</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="entry">
+
+        <div class="skills-label">Technical</div>
+        <div class="tag-list">
+          <span class="tag">Microsoft Word</span>
+          <span class="tag">Excel</span>
+          <span class="tag">PowerPoint</span>
+          <span class="tag">Microsoft Access</span>
+          <span class="tag">Omeda</span>
+          <span class="tag">Google Analytics</span>
+          <span class="tag">HTML</span>
+        </div>
+
+        <div class="skills-label" style="margin-top:20px;">Languages</div>
+        <div class="tag-list">
+          <span class="tag">English — Fluent</span>
+          <span class="tag">Japanese — Intermediate</span>
+        </div>
+
+        <div class="skills-label" style="margin-top:20px;">Practical</div>
+        <div class="tag-list">
+          <span class="tag">Business Writing</span>
+          <span class="tag">Scheduling</span>
+          <span class="tag">Organization</span>
+          <span class="tag">Logistics</span>
+          <span class="tag">Leadership</span>
+          <span class="tag">Time Management</span>
+          <span class="tag">Professional Communication</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SELECTED WORK -->
+  <div class="section" id="s-work">
+    <div class="section-header" onclick="toggle('s-work')">
+      <div>
+        <div class="section-title">Selected Work</div>
+        <div class="section-subtitle">Portfolio Projects</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="project-grid">
+        <div class="project-card">
+          <div class="project-card-title">Persona Analysis Project</div>
+          <div class="project-card-desc">Marketing segmentation research for B2B industries. Developed five buyer personas across two verticals for Trade Press Media Group.</div>
+        </div>
+        <div class="project-card">
+          <div class="project-card-title">Email Campaign Development</div>
+          <div class="project-card-desc">HTML-based promotional email campaigns for industry trade shows, reaching over 150,000 recipients.</div>
+        </div>
+        <div class="project-card">
+          <div class="project-card-title">時の顔 — Translation Project</div>
+          <div class="project-card-desc">Ongoing English translation of Komatsu Sakyō's short science fiction story 「時の顔」 <em>(The Face of Time)</em>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="section" id="s-contact">
+    <div class="section-header" onclick="toggle('s-contact')">
+      <div>
+        <div class="section-title">Contact</div>
+        <div class="section-subtitle">Get in Touch</div>
+      </div>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="entry">
+        <div class="entry-body">
+          <p style="font-size:16px; font-weight:300;">Email: <a href="mailto:jwgiese23@gmail.com" style="color:var(--accent); text-decoration:none; border-bottom:1px solid var(--border);">jwgiese23@gmail.com</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#" class="top-link" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Return to Top</a>
+
 </div>
-  
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/homeButton.js"></script>
-  
+
+<script>
+function toggle(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+function expandAll() {
+  document.querySelectorAll('.section').forEach(s => s.classList.add('open'));
+}
+function collapseAll() {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('open'));
+}
+</script>
 </body>
 </html>
-
