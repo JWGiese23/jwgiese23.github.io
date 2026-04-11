@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Joshua Giese — Resume &amp; Portfolio</title>
+  <title>Joshua Giese — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+JP:wght@300;400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -17,6 +17,7 @@
       --border: #c8b99a;
       --jp-line: #d4c5a9;
       --shadow: rgba(26,20,16,0.12);
+      --shadow-md: rgba(26,20,16,0.18);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -24,12 +25,13 @@
     body {
       background: var(--paper);
       color: var(--ink);
-      font-family: 'Cormorant Garamond', 'Noto Serif JP', Georgia, serif;
-      font-size: 18px;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 17px;
       line-height: 1.8;
       min-height: 100vh;
     }
 
+    /* Paper texture overlay */
     body::before {
       content: '';
       position: fixed;
@@ -41,288 +43,224 @@
       z-index: 0;
     }
 
-    .wrapper {
+    /* ── Layout Shell ── */
+    .layout {
       position: relative;
       z-index: 1;
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 0 32px 80px;
-    }
-
-    /* ── Title Block ── */
-    .title-block {
-      text-align: center;
-      padding: 64px 0 48px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 32px;
-      position: relative;
-    }
-
-    .title-block::before {
-      content: '◆';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: var(--gold);
-      font-size: 12px;
-      background: var(--paper);
-      padding: 0 8px;
-    }
-
-    .title-jp {
-      font-family: 'Noto Serif JP', serif;
-      font-size: 16px;
-      font-weight: 300;
-      letter-spacing: 0.3em;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .title-en {
-      font-family: 'Cinzel', serif;
-      font-size: 38px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      color: var(--ink);
-      margin-bottom: 10px;
-    }
-
-    .title-sub {
-      font-size: 14px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-style: italic;
-    }
-
-    /* ── Controls / nav ── */
-    .controls {
       display: flex;
-      gap: 10px;
-      margin-bottom: 28px;
-      align-items: center;
-      flex-wrap: wrap;
+      min-height: 100vh;
     }
 
-    .ctrl-btn {
-      font-family: 'Cinzel', serif;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 7px 16px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--muted);
-      cursor: pointer;
-      border-radius: 1px;
-      transition: all 0.2s;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .ctrl-btn:hover {
-      background: var(--aged);
-      color: var(--ink);
-      border-color: var(--muted);
-    }
-
-    .ctrl-divider {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-      min-width: 20px;
-    }
-
-    /* ── Sections (collapsible) ── */
-    .section {
-      margin-bottom: 6px;
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      overflow: hidden;
-      background: rgba(255,253,248,0.6);
-      box-shadow: 0 1px 4px var(--shadow);
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 24px;
-      cursor: pointer;
-      user-select: none;
-      background: var(--aged);
-      border-bottom: 1px solid transparent;
-      transition: background 0.2s, border-color 0.2s;
-      gap: 16px;
-    }
-
-    .section-header:hover { background: #dfd5be; }
-
-    .section.open .section-header { border-bottom-color: var(--border); }
-
-    .section-title {
-      font-family: 'Cinzel', serif;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      flex: 1;
-    }
-
-    .section-subtitle {
-      font-size: 12px;
-      color: var(--muted);
-      font-style: italic;
-      font-weight: 300;
-    }
-
-    .section-chevron {
-      width: 18px;
-      height: 18px;
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 260px;
       flex-shrink: 0;
-      color: var(--muted);
-      transition: transform 0.3s ease;
+      background: var(--aged);
+      border-right: 1px solid var(--border);
+      padding: 48px 28px 48px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
     }
 
-    .section.open .section-chevron { transform: rotate(180deg); }
-
-    .section-body {
-      display: none;
-      padding: 32px 36px;
-      animation: fadeIn 0.25s ease;
-    }
-
-    .section.open .section-body { display: block; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-4px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── Content typography ── */
-    .entry {
-      margin-bottom: 32px;
-      padding-bottom: 32px;
-      border-bottom: 1px dotted var(--jp-line);
-    }
-
-    .entry:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
-
-    .entry-title {
+    .sidebar-name {
       font-family: 'Cinzel', serif;
-      font-size: 15px;
+      font-size: 17px;
       font-weight: 600;
-      letter-spacing: 0.06em;
-      color: var(--ink);
-      margin-bottom: 2px;
-    }
-
-    .entry-meta {
-      font-size: 13px;
       letter-spacing: 0.08em;
-      color: var(--gold);
-      margin-bottom: 12px;
-      font-style: italic;
-    }
-
-    .entry-body {
-      font-size: 16px;
-      font-weight: 300;
       color: var(--ink);
-      line-height: 1.8;
-    }
-
-    .entry-body ul {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 12px;
-    }
-
-    .entry-body ul li {
-      padding-left: 1.4em;
-      position: relative;
       margin-bottom: 4px;
     }
 
-    .entry-body ul li::before {
-      content: '·';
-      position: absolute;
-      left: 0.3em;
-      color: var(--gold);
-      font-size: 1.2em;
-      line-height: 1.6;
-    }
-
-    .skills-label {
-      font-family: 'Cinzel', serif;
+    .sidebar-name-jp {
+      font-family: 'Noto Serif JP', serif;
       font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin: 16px 0 8px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+      margin-bottom: 24px;
     }
 
-    .skills-label::before, .skills-label::after {
-      content: '';
-      flex: 1;
+    .sidebar-divider {
       height: 1px;
       background: var(--border);
+      margin-bottom: 24px;
+      position: relative;
     }
 
-    /* Skills inline tags */
-    .tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
+    .sidebar-divider::after {
+      content: '◆';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 9px;
+      color: var(--gold);
+      background: var(--aged);
+      padding: 0 6px;
     }
 
-    .tag {
+    .sidebar-nav {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+
+    .sidebar-nav li { margin-bottom: 2px; }
+
+    .sidebar-nav a {
+      display: block;
+      font-family: 'Cinzel', serif;
+      font-size: 10.5px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 10px;
+      border-left: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a:hover {
+      color: var(--accent);
+      border-left-color: var(--gold);
+      background: rgba(184,149,42,0.06);
+    }
+
+    .sidebar-email {
+      margin-top: auto;
+      font-size: 12px;
+      color: var(--muted);
+      font-style: italic;
+      word-break: break-all;
+    }
+
+    .sidebar-email a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--jp-line);
+      transition: border-color 0.2s;
+    }
+
+    .sidebar-email a:hover { border-color: var(--accent); }
+
+    /* Mobile nav toggle */
+    .mobile-bar {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--aged);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mobile-bar-name {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      color: var(--ink);
+    }
+
+    .mobile-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      padding: 5px 10px;
+      cursor: pointer;
       font-family: 'Cinzel', serif;
       font-size: 10px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--muted);
-      padding: 3px 10px;
-      border: 1px solid var(--border);
       border-radius: 1px;
     }
 
-    /* Hero intro block */
-    .hero {
-      padding: 40px 36px 36px;
-      background: rgba(255,253,248,0.6);
-      border: 1px solid var(--border);
-      box-shadow: 0 1px 4px var(--shadow);
-      margin-bottom: 6px;
+    .mobile-toggle:hover { background: var(--border); }
+
+    /* ── Main Content ── */
+    .main {
+      flex: 1;
+      padding: 56px 56px 80px;
+      max-width: 860px;
     }
 
-    .hero p {
-      font-size: 17px;
+    /* ── Section headings ── */
+    .section-heading {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--jp-line);
+    }
+
+    section {
+      margin-bottom: 56px;
+      scroll-margin-top: 32px;
+    }
+
+    /* ── Hero ── */
+    #home .hero-inner {
+      display: flex;
+      gap: 48px;
+      align-items: flex-start;
+    }
+
+    .hero-text h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 34px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+
+    .hero-text .hero-jp {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 13px;
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .hero-text p {
+      font-size: 16px;
       font-weight: 300;
       color: var(--muted);
       line-height: 1.85;
-      max-width: 580px;
+      max-width: 460px;
+      margin-bottom: 24px;
     }
 
     .hero-cta {
       display: inline-block;
-      margin-top: 20px;
       font-family: 'Cinzel', serif;
-      font-size: 11px;
-      letter-spacing: 0.18em;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--muted);
-      padding: 8px 20px;
+      padding: 10px 24px;
       border: 1px solid var(--border);
       text-decoration: none;
       transition: all 0.2s;
@@ -334,136 +272,402 @@
       border-color: var(--muted);
     }
 
-    /* Project cards */
-    .project-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-      margin-top: 4px;
+    .hero-image {
+      flex-shrink: 0;
+      width: 220px;
     }
 
-    .project-card {
+    .hero-image img {
+      width: 100%;
+      display: block;
       border: 1px solid var(--border);
-      padding: 20px 22px;
-      background: rgba(255,253,248,0.5);
+      box-shadow: 4px 4px 0 var(--border);
+      filter: sepia(8%);
+    }
+
+    .img-placeholder {
+      width: 100%;
+      height: 200px;
+      background: var(--aged);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--border);
+      text-transform: uppercase;
+    }
+
+    /* ── Education ── */
+    .edu-entry {
+      margin-bottom: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1px dotted var(--jp-line);
+    }
+    .edu-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .edu-entry h4 {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    .edu-entry .edu-meta {
+      font-size: 13px;
+      color: var(--gold);
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+
+    .edu-entry ul {
+      list-style: none;
+      padding: 0;
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--muted);
+    }
+
+    .edu-entry ul li {
+      padding-left: 1.4em;
+      position: relative;
+      margin-bottom: 2px;
+    }
+
+    .edu-entry ul li::before {
+      content: '·';
+      position: absolute;
+      left: 0.3em;
+      color: var(--gold);
+      font-size: 1.2em;
+      line-height: 1.6;
+    }
+
+    /* ── Experience Cards ── */
+    .exp-card {
+      background: rgba(255, 253, 248, 0.7);
+      border: 1px solid var(--border);
+      padding: 28px 30px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 6px var(--shadow);
       transition: box-shadow 0.2s;
     }
 
-    .project-card:hover {
-      box-shadow: 0 3px 12px var(--shadow);
+    .exp-card:hover { box-shadow: 0 4px 14px var(--shadow-md); }
+    .exp-card:last-child { margin-bottom: 0; }
+
+    .exp-card h4 {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      color: var(--accent);
+      margin-bottom: 2px;
     }
 
-    .project-card-title {
-      font-family: 'Cinzel', serif;
+    .exp-card .exp-meta {
       font-size: 13px;
-      font-weight: 600;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--jp-line);
+    }
+
+    .exp-card ul {
+      list-style: none;
+      padding: 0;
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+
+    .exp-card ul li {
+      padding-left: 1.4em;
+      position: relative;
+      margin-bottom: 4px;
+    }
+
+    .exp-card ul li::before {
+      content: '·';
+      position: absolute;
+      left: 0.3em;
+      color: var(--gold);
+      font-size: 1.2em;
+      line-height: 1.6;
+    }
+
+    .skills-label {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin: 14px 0 8px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-family: 'Cinzel', serif;
+      font-size: 9.5px;
       letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 3px 10px;
+      border: 1px solid var(--border);
+      border-radius: 1px;
+    }
+
+    /* ── Extracurricular ── */
+    #extracurricular ul {
+      list-style: none;
+      padding: 0;
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--ink);
+    }
+
+    #extracurricular ul li {
+      padding-left: 1.6em;
+      position: relative;
+      margin-bottom: 6px;
+    }
+
+    #extracurricular ul li::before {
+      content: '◆';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 8px;
+      top: 9px;
+    }
+
+    /* ── Skills ── */
+    .skills-block {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px dotted var(--jp-line);
+    }
+    .skills-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .skills-block-label {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
       color: var(--accent);
       margin-bottom: 8px;
     }
 
-    .project-card-desc {
+    .skills-block p {
       font-size: 15px;
       font-weight: 300;
       color: var(--muted);
       line-height: 1.7;
     }
 
-    /* Scroll to top */
-    .top-link {
-      display: block;
-      text-align: center;
-      margin-top: 48px;
-      font-family: 'Cinzel', serif;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      opacity: 0.6;
-      transition: opacity 0.2s;
+    /* ── Project Cards ── */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
     }
-    .top-link:hover { opacity: 1; }
+
+    .project-card {
+      background: rgba(255, 253, 248, 0.7);
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 6px var(--shadow);
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .project-card:hover {
+      box-shadow: 0 5px 16px var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .project-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+      filter: sepia(12%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .project-card-img-placeholder {
+      width: 100%;
+      height: 160px;
+      background: var(--aged);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--border);
+      text-transform: uppercase;
+    }
+
+    .project-card-body {
+      padding: 18px 20px;
+    }
+
+    .project-card-body h5 {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .project-card-body p {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── Contact ── */
+    #contact p {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--muted);
+    }
+
+    #contact a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--jp-line);
+      transition: border-color 0.2s;
+    }
+
+    #contact a:hover { border-color: var(--accent); }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .layout { flex-direction: column; }
+
+      .sidebar {
+        display: none;
+        position: fixed;
+        top: 48px;
+        left: 0;
+        width: 100%;
+        height: auto;
+        max-height: 70vh;
+        z-index: 99;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .sidebar.mobile-open { display: flex; }
+      .mobile-bar { display: flex; }
+
+      .main { padding: 32px 24px 60px; }
+
+      #home .hero-inner { flex-direction: column-reverse; gap: 28px; }
+      .hero-image { width: 100%; max-width: 280px; }
+    }
   </style>
 </head>
 <body>
-<div class="wrapper">
 
-  <!-- Title -->
-  <div class="title-block">
-    <div class="title-jp">経歴とポートフォリオ</div>
-    <div class="title-en">Joshua Giese</div>
-    <div class="title-sub">Global Communications &ensp;·&ensp; Japanese &ensp;·&ensp; UWM Class of 2026</div>
+  <!-- Mobile nav bar -->
+  <div class="mobile-bar">
+    <span class="mobile-bar-name">Joshua Giese</span>
+    <button class="mobile-toggle" onclick="toggleSidebar()">Menu</button>
   </div>
 
-  <!-- Controls -->
-  <div class="controls">
-    <button class="ctrl-btn" onclick="expandAll()">Expand All</button>
-    <button class="ctrl-btn" onclick="collapseAll()">Collapse All</button>
-    <div class="ctrl-divider"></div>
-    <a class="ctrl-btn" href="https://jwgiese23.github.io/index.html">← Home</a>
-  </div>
+  <div class="layout">
 
-  <!-- Hero -->
-  <div class="hero">
-    <p>Global Communications &amp; Japanese major focused on international marketing, cross-cultural communication, and data-driven campaign strategy. Currently finishing a BA at the University of Wisconsin–Milwaukee, with study abroad experience at Nanzan University in Nagoya.</p>
-    <a href="mailto:jwgiese23@gmail.com" class="hero-cta">jwgiese23@gmail.com</a>
-  </div>
-
-  <!-- EDUCATION -->
-  <div class="section open" id="s-education">
-    <div class="section-header" onclick="toggle('s-education')">
-      <div>
-        <div class="section-title">Education</div>
-        <div class="section-subtitle">University of Wisconsin–Milwaukee &ensp;·&ensp; Nanzan University</div>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-name">Joshua Giese</div>
+      <div class="sidebar-name-jp">ポートフォリオ</div>
+      <div class="sidebar-divider"></div>
+      <ul class="sidebar-nav">
+        <li><a href="#home" onclick="closeSidebar()">Introduction</a></li>
+        <li><a href="#education" onclick="closeSidebar()">Education</a></li>
+        <li><a href="#experience" onclick="closeSidebar()">Experience</a></li>
+        <li><a href="#extracurricular" onclick="closeSidebar()">Extracurricular</a></li>
+        <li><a href="#skills" onclick="closeSidebar()">Skills</a></li>
+        <li><a href="#portfolio" onclick="closeSidebar()">Selected Work</a></li>
+        <li><a href="#contact" onclick="closeSidebar()">Contact</a></li>
+      </ul>
+      <div class="sidebar-email">
+        <a href="mailto:jwgiese23@gmail.com">jwgiese23@gmail.com</a>
       </div>
-      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-    <div class="section-body">
+    </nav>
 
-      <div class="entry">
-        <div class="entry-title">University of Wisconsin–Milwaukee</div>
-        <div class="entry-meta">September 2022 – May 2026 &ensp;·&ensp; Milwaukee, Wisconsin</div>
-        <div class="entry-body">
+    <!-- Main content -->
+    <main class="main">
+
+      <!-- Hero -->
+      <section id="home">
+        <div class="hero-inner">
+          <div class="hero-text">
+            <h1>Joshua Giese</h1>
+            <div class="hero-jp">グローバル・コミュニケーション &ensp;·&ensp; 日本語</div>
+            <p>
+              Global Communications &amp; Japanese major focused on international marketing,
+              cross-cultural communication, and data-driven campaign strategy.
+            </p>
+            <a href="#experience" class="hero-cta">View Experience</a>
+          </div>
+          <div class="hero-image">
+            <img src="images/banner-image.jpg" alt="Banner Image"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="img-placeholder" style="display:none;">Image</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Education -->
+      <section id="education">
+        <div class="section-heading">Education</div>
+
+        <div class="edu-entry">
+          <h4>University of Wisconsin–Milwaukee</h4>
+          <div class="edu-meta">September 2022 – May 2026 &ensp;·&ensp; Milwaukee, Wisconsin</div>
           <ul>
             <li>BA in Global Communications and Japanese</li>
             <li>GPA: 3.8</li>
             <li>Relevant Coursework: Business Writing, Business Administration</li>
           </ul>
         </div>
-      </div>
 
-      <div class="entry">
-        <div class="entry-title">Nanzan University — Study Abroad</div>
-        <div class="entry-meta">September 2023 – May 2024 &ensp;·&ensp; Nagoya, Japan</div>
-        <div class="entry-body">
+        <div class="edu-entry">
+          <h4>Nanzan University — Study Abroad</h4>
+          <div class="edu-meta">September 2023 – May 2024 &ensp;·&ensp; Nagoya, Japan</div>
           <ul>
             <li>Relevant Coursework: Advertising Campaigns in Japan, Management Sciences</li>
           </ul>
         </div>
-      </div>
+      </section>
 
-    </div>
-  </div>
+      <!-- Professional Experience -->
+      <section id="experience">
+        <div class="section-heading">Professional Experience</div>
 
-  <!-- PROFESSIONAL EXPERIENCE -->
-  <div class="section" id="s-experience">
-    <div class="section-header" onclick="toggle('s-experience')">
-      <div>
-        <div class="section-title">Professional Experience</div>
-        <div class="section-subtitle">Marketing · Logistics · Retail</div>
-      </div>
-      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-    <div class="section-body">
-
-      <div class="entry">
-        <div class="entry-title">Retail Sales Associate — BoxLunch (Seasonal)</div>
-        <div class="entry-meta">November 2025 – February 2026 &ensp;·&ensp; Wauwatosa, Wisconsin</div>
-        <div class="entry-body">
+        <div class="exp-card">
+          <h4>Retail Sales Associate — BoxLunch (Seasonal)</h4>
+          <div class="exp-meta">November 2025 – February 2026 &ensp;·&ensp; Wauwatosa, Wisconsin</div>
           <ul>
-            <li>Delivered customer service in a seasonal retail environment during peak holiday hours.</li>
-            <li>Managed and restocked shipments to keep the sales floor fully stocked.</li>
+            <li>Delivered customer service in a seasonal retail environment, assisting customers during peak holiday hours.</li>
+            <li>Managing and restocking shipments to the store and customers to keep the sales floor fully stocked.</li>
             <li>Handled transactions, customer inquiries, loyalty acquisitions, and in-store events.</li>
           </ul>
           <div class="skills-label">Skills Acquired</div>
@@ -473,16 +677,15 @@
             <span class="tag">Visual Merchandising</span>
           </div>
         </div>
-      </div>
 
-      <div class="entry">
-        <div class="entry-title">Marketing Intern — Trade Press Media Group</div>
-        <div class="entry-meta">June 2025 – August 2025 &ensp;·&ensp; Wauwatosa, Wisconsin</div>
-        <div class="entry-body">
+        <div class="exp-card">
+          <h4>Marketing Intern — Trade Press Media Group</h4>
+          <div class="exp-meta">June 2025 – August 2025 &ensp;·&ensp; Wauwatosa, Wisconsin</div>
           <ul>
-            <li>Collaborated with marketing, design, and editorial teams to develop campaign messaging, track engagement, and support event promotion to over 150,000 recipients.</li>
-            <li>Created persona analyses for two of four main industry groups, breaking each into five marketable categories.</li>
-            <li>Researched and analyzed the potential impacts of American tariffs on the global supply chain and freight rail industry.</li>
+            <li>Collaborated with the marketing, design, and editorial teams to develop campaign messaging, track engagement, and support event promotion efforts.</li>
+            <li>Producing and organizing marketing emails and social media posts to promote the company's brands and trade shows to over 150,000 recipients.</li>
+            <li>Created multiple Persona analyses for two of the four main industry groups, each broken into five marketable categories.</li>
+            <li>Researched and analyzed the potential impacts of American tariffs on the global supply chain and the freight rail industry.</li>
           </ul>
           <div class="skills-label">Skills Acquired</div>
           <div class="tag-list">
@@ -494,16 +697,13 @@
             <span class="tag">Market Research</span>
           </div>
         </div>
-      </div>
 
-      <div class="entry">
-        <div class="entry-title">Inventory Replenishment Operator — Lineage Logistics</div>
-        <div class="entry-meta">October 2021 – October 2024 &ensp;·&ensp; Waukesha, Wisconsin</div>
-        <div class="entry-body">
+        <div class="exp-card">
+          <h4>Inventory Replenishment Operator — Lineage Logistics</h4>
+          <div class="exp-meta">October 2021 – October 2024 &ensp;·&ensp; Waukesha, Wisconsin</div>
           <ul>
-            <li>Picked and put away palletized food units for freezer inventory and outbound shipping using a reach truck and electric pallet jack.</li>
-            <li>Recorded materials, weight, counts, and condition of food items via a Radio Frequency inventory system.</li>
-            <li>Served as team lead of the replenishment department.</li>
+            <li>Picking and putting away palletized food units for freezer inventory or outbound shipping using a reach truck or electric pallet jack.</li>
+            <li>Inventory management including recording materials, weight, counts, and condition of food items via a Radio Frequency system.</li>
           </ul>
           <div class="skills-label">Skills Acquired</div>
           <div class="tag-list">
@@ -512,136 +712,78 @@
             <span class="tag">Team Leadership</span>
           </div>
         </div>
-      </div>
+      </section>
 
-    </div>
+      <!-- Extracurricular -->
+      <section id="extracurricular">
+        <div class="section-heading">Extracurricular</div>
+        <ul>
+          <li>Participation in the Fall 2024 Gerald J. Alred Professional Writing Competition</li>
+          <li>First Place Prize — 12th Annual UWM Japanese Speech and Recitation Contest</li>
+        </ul>
+      </section>
+
+      <!-- Skills -->
+      <section id="skills">
+        <div class="section-heading">Skills</div>
+        <div class="skills-block">
+          <div class="skills-block-label">Technical Skills</div>
+          <p>Microsoft Office Suite (Word, Excel, PowerPoint), Microsoft Access, Omeda, Google Analytics, Fundamental HTML</p>
+        </div>
+        <div class="skills-block">
+          <div class="skills-block-label">Languages</div>
+          <p>Japanese (Intermediate) &ensp;·&ensp; English (Fluent)</p>
+        </div>
+        <div class="skills-block">
+          <div class="skills-block-label">Practical Skills</div>
+          <p>Scheduling, Business Writing, Organization, Logistics, Leadership, Time Management, Professional Communication</p>
+        </div>
+      </section>
+
+      <!-- Selected Work -->
+      <section id="portfolio">
+        <div class="section-heading">Selected Work</div>
+        <div class="project-grid">
+
+          <div class="project-card">
+            <img src="images/project1.jpg" alt="Persona Analysis Project"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="project-card-img-placeholder" style="display:none;">Project Image</div>
+            <div class="project-card-body">
+              <h5>Persona Analysis Project</h5>
+              <p>Marketing segmentation research for B2B industries.</p>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <img src="images/project2.jpg" alt="Email Campaign Development"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="project-card-img-placeholder" style="display:none;">Project Image</div>
+            <div class="project-card-body">
+              <h5>Email Campaign Development</h5>
+              <p>HTML-based promotional campaigns for trade shows.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section id="contact">
+        <div class="section-heading">Contact</div>
+        <p>Email: <a href="mailto:jwgiese23@gmail.com">jwgiese23@gmail.com</a></p>
+      </section>
+
+    </main>
   </div>
 
-  <!-- EXTRACURRICULAR -->
-  <div class="section" id="s-extra">
-    <div class="section-header" onclick="toggle('s-extra')">
-      <div>
-        <div class="section-title">Extracurricular</div>
-        <div class="section-subtitle">Competitions &ensp;·&ensp; Awards</div>
-      </div>
-      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-    <div class="section-body">
-      <div class="entry">
-        <div class="entry-body">
-          <ul>
-            <li>Participation in the Fall 2024 Gerald J. Alred Professional Writing Competition</li>
-            <li>First Place Prize — 12th Annual UWM Japanese Speech and Recitation Contest</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SKILLS -->
-  <div class="section" id="s-skills">
-    <div class="section-header" onclick="toggle('s-skills')">
-      <div>
-        <div class="section-title">Skills</div>
-        <div class="section-subtitle">Technical &ensp;·&ensp; Languages &ensp;·&ensp; Practical</div>
-      </div>
-      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-    <div class="section-body">
-      <div class="entry">
-
-        <div class="skills-label">Technical</div>
-        <div class="tag-list">
-          <span class="tag">Microsoft Word</span>
-          <span class="tag">Excel</span>
-          <span class="tag">PowerPoint</span>
-          <span class="tag">Microsoft Access</span>
-          <span class="tag">Omeda</span>
-          <span class="tag">Google Analytics</span>
-          <span class="tag">HTML</span>
-        </div>
-
-        <div class="skills-label" style="margin-top:20px;">Languages</div>
-        <div class="tag-list">
-          <span class="tag">English — Fluent</span>
-          <span class="tag">Japanese — Intermediate</span>
-        </div>
-
-        <div class="skills-label" style="margin-top:20px;">Practical</div>
-        <div class="tag-list">
-          <span class="tag">Business Writing</span>
-          <span class="tag">Scheduling</span>
-          <span class="tag">Organization</span>
-          <span class="tag">Logistics</span>
-          <span class="tag">Leadership</span>
-          <span class="tag">Time Management</span>
-          <span class="tag">Professional Communication</span>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- SELECTED WORK -->
-  <div class="section" id="s-work">
-    <div class="section-header" onclick="toggle('s-work')">
-      <div>
-        <div class="section-title">Selected Work</div>
-        <div class="section-subtitle">Portfolio Projects</div>
-      </div>
-      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-    <div class="section-body">
-      <div class="project-grid">
-        <div class="project-card">
-          <div class="project-card-title">Persona Analysis Project</div>
-          <div class="project-card-desc">Marketing segmentation research for B2B industries. Developed five buyer personas across two verticals for Trade Press Media Group.</div>
-        </div>
-        <div class="project-card">
-          <div class="project-card-title">Email Campaign Development</div>
-          <div class="project-card-desc">HTML-based promotional email campaigns for industry trade shows, reaching over 150,000 recipients.</div>
-        </div>
-        <div class="project-card">
-          <div class="project-card-title">時の顔 — Translation Project</div>
-          <div class="project-card-desc">Ongoing English translation of Komatsu Sakyō's short science fiction story 「時の顔」 <em>(The Face of Time)</em>.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CONTACT -->
-  <div class="section" id="s-contact">
-    <div class="section-header" onclick="toggle('s-contact')">
-      <div>
-        <div class="section-title">Contact</div>
-        <div class="section-subtitle">Get in Touch</div>
-      </div>
-      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-    <div class="section-body">
-      <div class="entry">
-        <div class="entry-body">
-          <p style="font-size:16px; font-weight:300;">Email: <a href="mailto:jwgiese23@gmail.com" style="color:var(--accent); text-decoration:none; border-bottom:1px solid var(--border);">jwgiese23@gmail.com</a></p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <a href="#" class="top-link" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Return to Top</a>
-
-</div>
-
-<script>
-function toggle(id) {
-  const el = document.getElementById(id);
-  el.classList.toggle('open');
-}
-function expandAll() {
-  document.querySelectorAll('.section').forEach(s => s.classList.add('open'));
-}
-function collapseAll() {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('open'));
-}
-</script>
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('mobile-open');
+    }
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('mobile-open');
+    }
+  </script>
 </body>
 </html>
