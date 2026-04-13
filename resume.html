@@ -1039,13 +1039,60 @@
     document.getElementById('sidebar').classList.remove('open');
   }
 
-  const carousel = document.querySelector('.work-carousel');
-  carousel.addEventListener('wheel', function(e) {
-    if (e.deltaY !== 0) {
-      e.preventDefault();
-      carousel.scrollLeft += e.deltaY;
-    }
-  }, { passive: false });
+const carousel = document.querySelector('.work-carousel');
+carousel.addEventListener('wheel', function(e) {
+  if (e.deltaY !== 0) {
+    e.preventDefault();
+    carousel.scrollBy({ left: e.deltaY * 1.5, behavior: 'smooth' });
+  }
+}, { passive: false });
+
+/* ─── Responsive breakpoints ─── */
+
+/* Large screens — give the main content more breathing room */
+@media (min-width: 1200px) {
+  .layout { grid-template-columns: 280px 1fr; }
+  .main { padding: 72px 96px 100px; max-width: 960px; }
+}
+
+/* Medium screens — shrink sidebar and padding */
+@media (max-width: 1024px) {
+  .layout { grid-template-columns: 200px 1fr; }
+  .main { padding: 48px 48px 100px; }
+  .work-carousel-wrap { margin: 0 -48px; padding: 0 48px; }
+}
+
+/* Small screens — collapse sidebar into hamburger menu */
+@media (max-width: 800px) {
+  .layout { grid-template-columns: 1fr; }
+
+  .sidebar {
+    display: none;
+    position: fixed;
+    top: 53px;
+    left: 0;
+    width: 100%;
+    height: auto;
+    max-height: calc(100vh - 53px);
+    z-index: 100;
+    border-right: none;
+    border-bottom: 1px solid var(--rule);
+    overflow-y: auto;
+  }
+
+  .sidebar.open { display: flex; }
+  .mobile-bar { display: flex; }
+
+  .main { padding: 32px 24px 80px; }
+
+  .edu-entry { grid-template-columns: 1fr; gap: 4px; }
+  .edu-date { margin-bottom: 4px; }
+  .exp-meta { text-align: left; }
+  .hero-stats { gap: 28px; }
+
+  .work-carousel-wrap { margin: 0 -24px; padding: 0 24px; }
+  .work-card { flex: 0 0 220px; }
+}
 </script>
 </body>
 </html>
