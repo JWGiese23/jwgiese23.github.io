@@ -468,33 +468,91 @@
       gap: 6px;
     }
 
-    /* ─── Selected Work ─── */
-    .work-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 24px;
+    /* ─── Selected Work — horizontal scroll carousel ─── */
+    .work-carousel-wrap {
+      /* Bleed the carousel edge-to-edge past the main padding so cards
+         feel cinematic, but keep content flush with the text column */
+      margin: 0 -72px;
+      padding: 0 72px;
+      position: relative;
     }
-
+ 
+    /* Fade-out hint on right edge so employers know it scrolls */
+    .work-carousel-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 80px;
+      height: 100%;
+      background: linear-gradient(to right, transparent, var(--white));
+      pointer-events: none;
+      z-index: 1;
+    }
+ 
+    .work-carousel {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding-bottom: 16px; /* room for scrollbar on Windows */
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      /* Hide scrollbar visually but keep it functional */
+      scrollbar-width: thin;
+      scrollbar-color: var(--rule) transparent;
+      padding-right: 80px; /* so last card isn't hidden under the fade */
+    }
+ 
+    .work-carousel::-webkit-scrollbar { height: 4px; }
+    .work-carousel::-webkit-scrollbar-track { background: transparent; }
+    .work-carousel::-webkit-scrollbar-thumb {
+      background: var(--rule);
+      border-radius: 2px;
+    }
+ 
+    /* Scroll hint label */
+    .work-scroll-hint {
+      font-size: 11px;
+      color: var(--light);
+      letter-spacing: 0.06em;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+ 
+    .work-scroll-hint svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--light);
+      fill: none;
+      stroke-width: 1.5;
+      flex-shrink: 0;
+    }
+ 
+    /* Each card is a link — no underline, inherits cursor */
     .work-card {
+      flex: 0 0 260px;          /* fixed width so 4–6 cards feel right */
+      scroll-snap-align: start;
       border: 1px solid var(--rule);
       border-radius: var(--radius);
       overflow: hidden;
-      transition: box-shadow 0.2s, transform 0.2s;
       background: var(--white);
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+      cursor: pointer;
     }
-
+ 
     .work-card:hover {
-      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.09);
       transform: translateY(-2px);
+      border-color: var(--accent);
     }
-
-    .work-card-img { 
-      width: 100%; 
-      height: 180px; 
-      object-fit: cover; 
-      display: block; 
-    }
-    
+ 
+    /* Arrow that appears on hover to signal clickability */
     .work-card-thumb {
       width: 100%;
       height: 180px;
@@ -507,31 +565,78 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--light);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
     }
-
+ 
+    /* ── TO ADD AN IMAGE:
+       Replace the <div class="work-card-thumb">…</div> with:
+       <img src="images/your-file.jpg" alt="Description" class="work-card-img">
+       CSS below handles it automatically. ── */
+    .work-card-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      border-bottom: 1px solid var(--rule);
+      transition: opacity 0.2s;
+    }
+ 
+    .work-card:hover .work-card-img { opacity: 0.9; }
+ 
+    /* Open-in-new icon overlay on hover */
+    .work-card-thumb::after {
+      content: '↗';
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      font-size: 16px;
+      color: var(--accent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+ 
+    .work-card:hover .work-card-thumb::after { opacity: 1; }
+ 
     .work-card-body {
       padding: 20px 22px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
-
+ 
     .work-card-title {
       font-family: 'DM Serif Display', serif;
       font-size: 16px;
       color: var(--ink);
       margin-bottom: 6px;
     }
-
+ 
     .work-card-desc {
       font-size: 13px;
       color: var(--mid);
       font-weight: 300;
       line-height: 1.6;
       margin-bottom: 14px;
+      flex: 1;
     }
-
+ 
     .work-card-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
+    }
+ 
+    .work-card-link-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
     /* ─── Contact ─── */
@@ -829,35 +934,67 @@
     <!-- Selected Work -->
     <section id="work">
       <div class="section-label">Selected Work</div>
-      <div class="work-grid">
-
-        <div class="work-card">
-          <img src="images/resume/project1.png" alt="Persona Analysis" class="work-card-img">
-          <div class="work-card-body">
-            <div class="work-card-title">Persona Analysis</div>
-            <p class="work-card-desc">B2B buyer segmentation research across two industry verticals, each broken into five marketable buyer categories for Trade Press Media Group.</p>
-            <div class="work-card-tags">
-              <span class="tag">B2B Research</span>
-              <span class="tag">Marketing Strategy</span>
+ 
+      <p class="work-scroll-hint">
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        Scroll to browse
+      </p>
+ 
+      <div class="work-carousel-wrap">
+        <div class="work-carousel">
+ 
+          <!-- ─ CARD 1 ─
+               To link to your file, change href to:
+               https://jwgiese23.github.io/selectedWork/persona-analysis.pdf
+               To add an image, replace <div class="work-card-thumb">…</div> with:
+               <img src="images/project1.jpg" alt="Persona Analysis" class="work-card-img"> -->
+          <a class="work-card" href="https://jwgiese23.github.io/selectedWork/persona-analysis.pdf" target="_blank">
+            <div class="work-card-thumb">Coming Soon</div>
+            <div class="work-card-body">
+              <div class="work-card-title">Persona Analysis</div>
+              <p class="work-card-desc">B2B buyer segmentation research across two industry verticals, each broken into five marketable buyer categories for Trade Press Media Group.</p>
+              <div class="work-card-tags">
+                <span class="tag">B2B Research</span>
+                <span class="tag">Marketing Strategy</span>
+              </div>
+              <div class="work-card-link-label">View Project ↗</div>
             </div>
-          </div>
-        </div>
-
-        <div class="work-card">
-          <img src="images/resume/project2.png" alt="Email Campaign" class="work-card-img">
-          <div class="work-card-body">
-            <div class="work-card-title">Email Campaign Development</div>
-            <p class="work-card-desc">HTML email campaigns promoting industry trade shows and brand content to a list of 150,000+ B2B subscribers.</p>
-            <div class="work-card-tags">
-              <span class="tag">HTML Email</span>
-              <span class="tag">Campaign Production</span>
+          </a>
+ 
+          <!-- ─ CARD 2 ─
+               Change href to your actual file, e.g.:
+               https://jwgiese23.github.io/selectedWork/email-campaign.pdf -->
+          <a class="work-card" href="https://jwgiese23.github.io/selectedWork/email-campaign.pdf" target="_blank">
+            <div class="work-card-thumb">Coming Soon</div>
+            <div class="work-card-body">
+              <div class="work-card-title">Email Campaign Development</div>
+              <p class="work-card-desc">HTML email campaigns promoting industry trade shows and brand content to a list of 150,000+ B2B subscribers.</p>
+              <div class="work-card-tags">
+                <span class="tag">HTML Email</span>
+                <span class="tag">Campaign Production</span>
+              </div>
+              <div class="work-card-link-label">View Project ↗</div>
             </div>
-          </div>
+          </a>
+ 
+          <!-- ─ CARD 3 — duplicate this block to add more cards ─
+          <a class="work-card" href="https://jwgiese23.github.io/selectedWork/your-file.pdf" target="_blank">
+            <div class="work-card-thumb">Coming Soon</div>
+            <div class="work-card-body">
+              <div class="work-card-title">Project Title</div>
+              <p class="work-card-desc">Short description of what the project was and what you did.</p>
+              <div class="work-card-tags">
+                <span class="tag">Tag</span>
+              </div>
+              <div class="work-card-link-label">View Project ↗</div>
+            </div>
+          </a>
+          -->
+ 
         </div>
-
       </div>
     </section>
-
+ 
     <!-- Contact -->
     <section id="contact">
       <div class="section-label">Contact</div>
