@@ -678,35 +678,49 @@
     }
 
     /* ─── Responsive ─── */
-    @media (max-width: 800px) {
-      .layout { grid-template-columns: 1fr; }
+/* Wide screens — expand content area */
+@media (min-width: 1200px) {
+  .main { max-width: 1000px; padding: 72px 96px 100px; }
+  .work-carousel-wrap { margin: 0 -96px; padding: 0 96px; }
+}
 
-      .sidebar {
-        display: none;
-        position: fixed;
-        top: 53px;
-        left: 0;
-        width: 100%;
-        height: auto;
-        max-height: calc(100vh - 53px);
-        z-index: 100;
-        border-right: none;
-        border-bottom: 1px solid var(--rule);
-        flex-direction: column;
-      }
+/* Medium screens — tighten up */
+@media (max-width: 1024px) {
+  .main { padding: 48px 48px 100px; }
+  .work-carousel-wrap { margin: 0 -48px; padding: 0 48px; }
+}
 
-      .sidebar.open { display: flex; }
-      .mobile-bar { display: flex; }
+/* Small screens — collapse sidebar */
+@media (max-width: 800px) {
+  .layout { grid-template-columns: 1fr; }
 
-      .main { padding: 36px 24px 80px; }
+  .sidebar {
+    display: none;
+    position: fixed;
+    top: 53px;
+    left: 0;
+    width: 100%;
+    height: auto;
+    max-height: calc(100vh - 53px);
+    z-index: 100;
+    border-right: none;
+    border-bottom: 1px solid var(--rule);
+    flex-direction: column;
+  }
 
-      .edu-entry { grid-template-columns: 1fr; gap: 4px; }
-      .edu-date { margin-bottom: 4px; }
+  .sidebar.open { display: flex; }
+  .mobile-bar { display: flex; }
 
-      .exp-meta { text-align: left; }
+  .main { padding: 32px 24px 80px; }
 
-      .hero-stats { gap: 28px; }
-    }
+  .edu-entry { grid-template-columns: 1fr; gap: 4px; }
+  .edu-date { margin-bottom: 4px; }
+  .exp-meta { text-align: left; }
+  .hero-stats { gap: 28px; }
+
+  .work-carousel-wrap { margin: 0 -24px; padding: 0 24px; }
+  .work-card { flex: 0 0 220px; }
+  }
   </style>
 </head>
 <body>
@@ -1039,60 +1053,17 @@
     document.getElementById('sidebar').classList.remove('open');
   }
 
-const carousel = document.querySelector('.work-carousel');
-carousel.addEventListener('wheel', function(e) {
-  if (e.deltaY !== 0) {
-    e.preventDefault();
-    carousel.scrollBy({ left: e.deltaY * 1.5, behavior: 'smooth' });
-  }
-}, { passive: false });
-
-/* ─── Responsive breakpoints ─── */
-
-/* Large screens — give the main content more breathing room */
-@media (min-width: 1200px) {
-  .layout { grid-template-columns: 280px 1fr; }
-  .main { padding: 72px 96px 100px; max-width: 960px; }
-}
-
-/* Medium screens — shrink sidebar and padding */
-@media (max-width: 1024px) {
-  .layout { grid-template-columns: 200px 1fr; }
-  .main { padding: 48px 48px 100px; }
-  .work-carousel-wrap { margin: 0 -48px; padding: 0 48px; }
-}
-
-/* Small screens — collapse sidebar into hamburger menu */
-@media (max-width: 800px) {
-  .layout { grid-template-columns: 1fr; }
-
-  .sidebar {
-    display: none;
-    position: fixed;
-    top: 53px;
-    left: 0;
-    width: 100%;
-    height: auto;
-    max-height: calc(100vh - 53px);
-    z-index: 100;
-    border-right: none;
-    border-bottom: 1px solid var(--rule);
-    overflow-y: auto;
-  }
-
-  .sidebar.open { display: flex; }
-  .mobile-bar { display: flex; }
-
-  .main { padding: 32px 24px 80px; }
-
-  .edu-entry { grid-template-columns: 1fr; gap: 4px; }
-  .edu-date { margin-bottom: 4px; }
-  .exp-meta { text-align: left; }
-  .hero-stats { gap: 28px; }
-
-  .work-carousel-wrap { margin: 0 -24px; padding: 0 24px; }
-  .work-card { flex: 0 0 220px; }
-}
+  document.addEventListener('DOMContentLoaded', function() {
+    var carousel = document.querySelector('.work-carousel');
+    if (carousel) {
+      carousel.addEventListener('wheel', function(e) {
+        if (e.deltaY !== 0) {
+          e.preventDefault();
+          carousel.scrollBy({ left: e.deltaY * 1.5, behavior: 'smooth' });
+        }
+      }, { passive: false });
+    }
+  });
 </script>
 </body>
 </html>
