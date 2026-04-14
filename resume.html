@@ -128,6 +128,27 @@
 
     .sidebar-contact a:hover { color: var(--accent); }
 
+    .sidebar-download {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 8px 14px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--ink);
+      border-radius: var(--radius);
+      text-decoration: none;
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .sidebar-download:hover {
+      background: var(--accent);
+      color: var(--white);
+    }
+
     /* ─── Mobile bar ─── */
     .mobile-bar {
       display: none;
@@ -733,7 +754,10 @@
 <!-- Mobile top bar -->
 <div class="mobile-bar">
   <span class="mobile-bar-name">Joshua Giese</span>
-  <button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">Menu</button>
+  <div style="display:flex; gap:8px; align-items:center;">
+    <a href="https://jwgiese23.github.io/resume/resume.pdf" download target="_blank" class="sidebar-download" style="margin-top:0;">Résumé ↓</a>
+    <button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">Menu</button>
+  </div>
 </div>
 
 <div class="layout">
@@ -756,6 +780,7 @@
     <div class="sidebar-contact">
       <a href="mailto:jwgiese23@gmail.com">jwgiese23@gmail.com</a>
       <a href="https://www.linkedin.com/in/Joshua-Giese23/" target="_blank">LinkedIn</a>
+      <a href="https://jwgiese23.github.io/resume/resume.pdf" download target="_blank" class="sidebar-download">Download Resume ↓</a>
     </div>
   </nav>
 
